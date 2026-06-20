@@ -240,7 +240,7 @@ export const useStore = create<State>()(
           mastered: 14 * day,
         };
         const xpGain = result === "correct" ? 10 : result === "partial" ? 5 : 0;
-        let nextStatus: CardStatus = "learning";
+        let nextStatus = "learning" as CardStatus;
         set((s) => ({
           xp: s.xp + xpGain,
           cards: s.cards.map((c) => {
