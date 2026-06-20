@@ -88,46 +88,58 @@ const todayStr = () => new Date().toISOString().slice(0, 10);
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 
 const SAMPLE_DECKS: Omit<Deck, "createdAt">[] = [
-  { id: "d_aiml", name: "Basic English", description: "Simple words and grammar", emoji: "📘", color: "from-indigo-500 to-sky-500" },
-  { id: "d_dsa", name: "Basic Maths", description: "Easy numbers and formulas", emoji: "🔢", color: "from-emerald-500 to-teal-500" },
-  { id: "d_math", name: "Basic Science", description: "Everyday science facts", emoji: "🔬", color: "from-amber-500 to-orange-500" },
-  { id: "d_interview", name: "General Knowledge", description: "Simple GK questions", emoji: "🌍", color: "from-rose-500 to-pink-500" },
-  { id: "d_python", name: "Computer Basics", description: "Easy computer terms", emoji: "💻", color: "from-sky-500 to-cyan-500" },
-  { id: "d_apt", name: "Hindi Basics", description: "Common Hindi meanings", emoji: "📗", color: "from-fuchsia-500 to-purple-500" },
+  { id: "d_aiml", name: "C Programming", description: "Basics of C language", emoji: "🔡", color: "from-indigo-500 to-sky-500" },
+  { id: "d_dsa", name: "Python Basics", description: "Beginner Python concepts", emoji: "🐍", color: "from-emerald-500 to-teal-500" },
+  { id: "d_math", name: "HTML Basics", description: "Web page structure", emoji: "🌐", color: "from-amber-500 to-orange-500" },
+  { id: "d_interview", name: "CSS Basics", description: "Styling web pages", emoji: "🎨", color: "from-rose-500 to-pink-500" },
+  { id: "d_python", name: "Computer Fundamentals", description: "Intro to computers", emoji: "💻", color: "from-sky-500 to-cyan-500" },
+  { id: "d_apt", name: "DBMS Basics", description: "Database fundamentals", emoji: "🗄️", color: "from-fuchsia-500 to-purple-500" },
 ];
 
 type SampleCard = { deckId: string; front: string; back: string; tags?: string[] };
 const SAMPLE_CARDS: SampleCard[] = [
-  // Basic English
-  { deckId: "d_aiml", front: "What is the opposite of hot?", back: "Cold", tags: ["Easy"] },
-  { deckId: "d_aiml", front: "Which word is a noun: run or school?", back: "School", tags: ["Easy"] },
-  { deckId: "d_aiml", front: "Fill in the blank: I ___ a student.", back: "am", tags: ["Easy"] },
-  { deckId: "d_aiml", front: "What is the plural of book?", back: "Books", tags: ["Easy"] },
-  // Basic Maths
-  { deckId: "d_dsa", front: "What is 2 + 3?", back: "5", tags: ["Easy"] },
-  { deckId: "d_dsa", front: "What is 10 - 4?", back: "6", tags: ["Easy"] },
-  { deckId: "d_dsa", front: "What is 5 × 2?", back: "10", tags: ["Easy"] },
-  { deckId: "d_dsa", front: "How many sides does a triangle have?", back: "3", tags: ["Easy"] },
-  // Basic Science
-  { deckId: "d_math", front: "Which planet do we live on?", back: "Earth", tags: ["Easy"] },
-  { deckId: "d_math", front: "What do plants need to make food?", back: "Sunlight", tags: ["Easy"] },
-  { deckId: "d_math", front: "What do we breathe in?", back: "Oxygen", tags: ["Easy"] },
-  { deckId: "d_math", front: "Water freezes into what?", back: "Ice", tags: ["Easy"] },
-  // General Knowledge
-  { deckId: "d_interview", front: "How many days are in a week?", back: "7 days", tags: ["Easy"] },
-  { deckId: "d_interview", front: "How many months are in a year?", back: "12 months", tags: ["Easy"] },
-  { deckId: "d_interview", front: "What color is the sky on a clear day?", back: "Blue", tags: ["Easy"] },
-  { deckId: "d_interview", front: "Which animal is called the king of the jungle?", back: "Lion", tags: ["Easy"] },
-  // Computer Basics
-  { deckId: "d_python", front: "What is used to type on a computer?", back: "Keyboard", tags: ["Easy"] },
-  { deckId: "d_python", front: "What is used to move the pointer?", back: "Mouse", tags: ["Easy"] },
+  // C Programming
+  { deckId: "d_aiml", front: "Who developed the C language?", back: "Dennis Ritchie (1972, Bell Labs)", tags: ["Easy"] },
+  { deckId: "d_aiml", front: "Which function is the entry point of a C program?", back: "main()", tags: ["Easy"] },
+  { deckId: "d_aiml", front: "Which header file is needed for printf()?", back: "stdio.h", tags: ["Easy"] },
+  { deckId: "d_aiml", front: "What symbol ends every C statement?", back: "Semicolon ( ; )", tags: ["Easy"] },
+  { deckId: "d_aiml", front: "What is the format specifier for an integer?", back: "%d", tags: ["Easy"] },
+  { deckId: "d_aiml", front: "Which keyword is used to declare a constant?", back: "const", tags: ["Easy"] },
+  // Python Basics
+  { deckId: "d_dsa", front: "Who created Python?", back: "Guido van Rossum (1991)", tags: ["Easy"] },
+  { deckId: "d_dsa", front: "How do you print 'Hello' in Python?", back: "print('Hello')", tags: ["Easy"] },
+  { deckId: "d_dsa", front: "Which symbol starts a comment in Python?", back: "# (hash)", tags: ["Easy"] },
+  { deckId: "d_dsa", front: "What data type is 3.14 in Python?", back: "float", tags: ["Easy"] },
+  { deckId: "d_dsa", front: "Which keyword defines a function in Python?", back: "def", tags: ["Easy"] },
+  { deckId: "d_dsa", front: "What does len('hello') return?", back: "5", tags: ["Easy"] },
+  // HTML Basics
+  { deckId: "d_math", front: "What does HTML stand for?", back: "HyperText Markup Language", tags: ["Easy"] },
+  { deckId: "d_math", front: "Which tag creates the largest heading?", back: "<h1>", tags: ["Easy"] },
+  { deckId: "d_math", front: "Which tag is used to insert an image?", back: "<img>", tags: ["Easy"] },
+  { deckId: "d_math", front: "Which tag creates a hyperlink?", back: "<a> (anchor tag)", tags: ["Easy"] },
+  { deckId: "d_math", front: "What is the correct HTML5 doctype?", back: "<!DOCTYPE html>", tags: ["Easy"] },
+  { deckId: "d_math", front: "Which tag is used for line break?", back: "<br>", tags: ["Easy"] },
+  // CSS Basics
+  { deckId: "d_interview", front: "What does CSS stand for?", back: "Cascading Style Sheets", tags: ["Easy"] },
+  { deckId: "d_interview", front: "Which property changes text color?", back: "color", tags: ["Easy"] },
+  { deckId: "d_interview", front: "Which property sets background color?", back: "background-color", tags: ["Easy"] },
+  { deckId: "d_interview", front: "Which symbol selects an id in CSS?", back: "# (hash)", tags: ["Easy"] },
+  { deckId: "d_interview", front: "Which symbol selects a class in CSS?", back: ". (dot)", tags: ["Easy"] },
+  { deckId: "d_interview", front: "Which property makes text bold?", back: "font-weight: bold", tags: ["Easy"] },
+  // Computer Fundamentals
   { deckId: "d_python", front: "What does CPU stand for?", back: "Central Processing Unit", tags: ["Easy"] },
-  { deckId: "d_python", front: "What do we use to see computer output?", back: "Monitor", tags: ["Easy"] },
-  // Hindi Basics
-  { deckId: "d_apt", front: "What is the Hindi meaning of water?", back: "Paani", tags: ["Easy"] },
-  { deckId: "d_apt", front: "What is the Hindi meaning of book?", back: "Kitaab", tags: ["Easy"] },
-  { deckId: "d_apt", front: "What is the Hindi meaning of school?", back: "Vidyalaya", tags: ["Easy"] },
-  { deckId: "d_apt", front: "What is the Hindi meaning of friend?", back: "Dost", tags: ["Easy"] },
+  { deckId: "d_python", front: "What does RAM stand for?", back: "Random Access Memory", tags: ["Easy"] },
+  { deckId: "d_python", front: "Which is volatile memory: RAM or ROM?", back: "RAM", tags: ["Easy"] },
+  { deckId: "d_python", front: "1 Byte = how many bits?", back: "8 bits", tags: ["Easy"] },
+  { deckId: "d_python", front: "What does OS stand for?", back: "Operating System", tags: ["Easy"] },
+  { deckId: "d_python", front: "Give one example of an input device.", back: "Keyboard / Mouse", tags: ["Easy"] },
+  // DBMS Basics
+  { deckId: "d_apt", front: "What does DBMS stand for?", back: "Database Management System", tags: ["Easy"] },
+  { deckId: "d_apt", front: "What does SQL stand for?", back: "Structured Query Language", tags: ["Easy"] },
+  { deckId: "d_apt", front: "Which SQL command fetches data?", back: "SELECT", tags: ["Easy"] },
+  { deckId: "d_apt", front: "Which key uniquely identifies a row?", back: "Primary Key", tags: ["Easy"] },
+  { deckId: "d_apt", front: "Which command removes a table?", back: "DROP TABLE", tags: ["Easy"] },
+  { deckId: "d_apt", front: "Which command adds a new row?", back: "INSERT INTO", tags: ["Easy"] },
 ];
 
 function buildSample() {
@@ -263,8 +275,8 @@ export const useStore = create<State>()(
       },
     }),
     {
-      name: "flashmaster-store-v4",
-      version: 4,
+      name: "flashmaster-store-v5",
+      version: 5,
       onRehydrateStorage: () => (state) => {
         if (state && state.decks.length === 0 && state.cards.length === 0) {
           state.loadSampleData();
