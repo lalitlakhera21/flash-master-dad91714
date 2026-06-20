@@ -65,6 +65,7 @@ interface State {
   activity: DayActivity[];
   settings: Settings;
   streak: { current: number; longest: number; lastDate?: string };
+  xp: number;
 
   // actions
   addDeck: (d: Omit<Deck, "id" | "createdAt">) => string;
@@ -77,6 +78,7 @@ interface State {
   toggleFavorite: (id: string) => void;
   setDifficulty: (id: string, d: Difficulty) => void;
   reviewCard: (id: string) => void;
+  recordAttempt: (id: string, result: AttemptResult) => number; // returns xp gained
 
   recordStudy: (cards: number, minutes: number) => void;
   recordQuiz: (r: Omit<QuizResult, "id" | "takenAt">) => void;
