@@ -88,48 +88,46 @@ const todayStr = () => new Date().toISOString().slice(0, 10);
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 
 const SAMPLE_DECKS: Omit<Deck, "createdAt">[] = [
-  { id: "d_aiml", name: "AI & Machine Learning", description: "Core ML & AI concepts", emoji: "🧠", color: "from-indigo-500 to-violet-500" },
-  { id: "d_dsa", name: "DSA", description: "Data Structures & Algorithms", emoji: "🧮", color: "from-emerald-500 to-teal-500" },
-  { id: "d_math", name: "Mathematics", description: "Calculus, linear algebra, probability", emoji: "📐", color: "from-amber-500 to-orange-500" },
-  { id: "d_interview", name: "Interview Prep", description: "Behavioral + technical", emoji: "🎯", color: "from-rose-500 to-pink-500" },
-  { id: "d_python", name: "Python", description: "Python essentials", emoji: "🐍", color: "from-sky-500 to-cyan-500" },
-  { id: "d_apt", name: "Aptitude", description: "Quant & reasoning", emoji: "🧩", color: "from-fuchsia-500 to-purple-500" },
+  { id: "d_english", name: "Basic English", description: "Simple words and grammar", emoji: "📘", color: "from-indigo-500 to-sky-500" },
+  { id: "d_math", name: "Basic Maths", description: "Easy numbers and formulas", emoji: "🔢", color: "from-emerald-500 to-teal-500" },
+  { id: "d_science", name: "Basic Science", description: "Everyday science facts", emoji: "🔬", color: "from-amber-500 to-orange-500" },
+  { id: "d_gk", name: "General Knowledge", description: "Simple GK questions", emoji: "🌍", color: "from-rose-500 to-pink-500" },
+  { id: "d_computer", name: "Computer Basics", description: "Easy computer terms", emoji: "💻", color: "from-sky-500 to-cyan-500" },
+  { id: "d_hindi", name: "Hindi Basics", description: "Common Hindi meanings", emoji: "📗", color: "from-fuchsia-500 to-purple-500" },
 ];
 
 type SampleCard = { deckId: string; front: string; back: string; tags?: string[] };
 const SAMPLE_CARDS: SampleCard[] = [
-  // AI & ML
-  { deckId: "d_aiml", front: "What is overfitting?", back: "When a model learns noise in training data and fails to generalize to new data.", tags: ["Important"] },
-  { deckId: "d_aiml", front: "Define precision and recall.", back: "Precision = TP/(TP+FP). Recall = TP/(TP+FN).", tags: ["Exam"] },
-  { deckId: "d_aiml", front: "What is gradient descent?", back: "Optimization algorithm that iteratively updates parameters in the direction of the negative gradient of the loss.", tags: ["Important"] },
-  { deckId: "d_aiml", front: "Bias vs Variance?", back: "Bias = error from wrong assumptions. Variance = error from sensitivity to small fluctuations.", tags: ["Revision"] },
-  { deckId: "d_aiml", front: "What is a confusion matrix?", back: "A table showing TP, TN, FP, FN for classifier evaluation.", tags: [] },
-  { deckId: "d_aiml", front: "What is dropout?", back: "Regularization technique that randomly zeros activations during training to reduce overfitting.", tags: [] },
-  // DSA
-  { deckId: "d_dsa", front: "Time complexity of binary search?", back: "O(log n) on a sorted array.", tags: ["Easy"] },
-  { deckId: "d_dsa", front: "What is a hash table average lookup?", back: "O(1) average, O(n) worst-case.", tags: ["Important"] },
-  { deckId: "d_dsa", front: "Difference between BFS and DFS?", back: "BFS uses a queue and explores by depth levels; DFS uses a stack/recursion and goes deep first.", tags: ["Exam"] },
-  { deckId: "d_dsa", front: "What is dynamic programming?", back: "Solving problems by combining solutions to overlapping subproblems with memoization or tabulation.", tags: ["Hard"] },
-  { deckId: "d_dsa", front: "Quicksort average complexity?", back: "O(n log n) average, O(n^2) worst.", tags: [] },
-  { deckId: "d_dsa", front: "Stack vs Queue?", back: "Stack = LIFO. Queue = FIFO.", tags: ["Easy"] },
-  // Math
-  { deckId: "d_math", front: "Derivative of sin(x)?", back: "cos(x)", tags: ["Easy"] },
-  { deckId: "d_math", front: "Integral of 1/x?", back: "ln|x| + C", tags: [] },
-  { deckId: "d_math", front: "What is Bayes' Theorem?", back: "P(A|B) = P(B|A) · P(A) / P(B)", tags: ["Important"] },
-  { deckId: "d_math", front: "Determinant of a 2x2 matrix [[a,b],[c,d]]?", back: "ad − bc", tags: [] },
-  // Interview
-  { deckId: "d_interview", front: "Tell me about yourself — what to cover?", back: "Present → Past → Future. Current role, relevant past, why you're excited about this role.", tags: ["Important"] },
-  { deckId: "d_interview", front: "STAR method?", back: "Situation, Task, Action, Result — structure for behavioral answers.", tags: ["Exam"] },
-  { deckId: "d_interview", front: "How to answer 'biggest weakness'?", back: "Pick a real one, show self-awareness, describe concrete steps you're taking to improve.", tags: [] },
-  // Python
-  { deckId: "d_python", front: "Difference between list and tuple?", back: "Lists are mutable; tuples are immutable and hashable.", tags: ["Easy"] },
-  { deckId: "d_python", front: "What is a list comprehension?", back: "Concise syntax: [expr for x in iterable if cond]", tags: [] },
-  { deckId: "d_python", front: "What does GIL stand for?", back: "Global Interpreter Lock — allows only one thread to execute Python bytecode at a time.", tags: ["Important"] },
-  { deckId: "d_python", front: "Shallow vs deep copy?", back: "Shallow copies references to nested objects; deep copy recursively duplicates them.", tags: [] },
-  // Aptitude
-  { deckId: "d_apt", front: "Average of 1..10?", back: "5.5", tags: ["Easy"] },
-  { deckId: "d_apt", front: "If a train 120m crosses a pole in 6s, speed?", back: "20 m/s = 72 km/h", tags: [] },
-  { deckId: "d_apt", front: "Compound interest formula?", back: "A = P(1 + r/n)^(nt)", tags: ["Important"] },
+  // Basic English
+  { deckId: "d_english", front: "What is the opposite of hot?", back: "Cold", tags: ["Easy"] },
+  { deckId: "d_english", front: "Which word is a noun: run or school?", back: "School", tags: ["Easy"] },
+  { deckId: "d_english", front: "Fill in the blank: I ___ a student.", back: "am", tags: ["Easy"] },
+  { deckId: "d_english", front: "What is the plural of book?", back: "Books", tags: ["Easy"] },
+  // Basic Maths
+  { deckId: "d_math", front: "What is 2 + 3?", back: "5", tags: ["Easy"] },
+  { deckId: "d_math", front: "What is 10 - 4?", back: "6", tags: ["Easy"] },
+  { deckId: "d_math", front: "What is 5 × 2?", back: "10", tags: ["Easy"] },
+  { deckId: "d_math", front: "How many sides does a triangle have?", back: "3", tags: ["Easy"] },
+  // Basic Science
+  { deckId: "d_science", front: "Which planet do we live on?", back: "Earth", tags: ["Easy"] },
+  { deckId: "d_science", front: "What do plants need to make food?", back: "Sunlight", tags: ["Easy"] },
+  { deckId: "d_science", front: "What do we breathe in?", back: "Oxygen", tags: ["Easy"] },
+  { deckId: "d_science", front: "Water freezes into what?", back: "Ice", tags: ["Easy"] },
+  // General Knowledge
+  { deckId: "d_gk", front: "How many days are in a week?", back: "7 days", tags: ["Easy"] },
+  { deckId: "d_gk", front: "How many months are in a year?", back: "12 months", tags: ["Easy"] },
+  { deckId: "d_gk", front: "What color is the sky on a clear day?", back: "Blue", tags: ["Easy"] },
+  { deckId: "d_gk", front: "Which animal is called the king of the jungle?", back: "Lion", tags: ["Easy"] },
+  // Computer Basics
+  { deckId: "d_computer", front: "What is used to type on a computer?", back: "Keyboard", tags: ["Easy"] },
+  { deckId: "d_computer", front: "What is used to move the pointer?", back: "Mouse", tags: ["Easy"] },
+  { deckId: "d_computer", front: "What does CPU stand for?", back: "Central Processing Unit", tags: ["Easy"] },
+  { deckId: "d_computer", front: "What do we use to see computer output?", back: "Monitor", tags: ["Easy"] },
+  // Hindi Basics
+  { deckId: "d_hindi", front: "What is the Hindi meaning of water?", back: "Paani", tags: ["Easy"] },
+  { deckId: "d_hindi", front: "What is the Hindi meaning of book?", back: "Kitaab", tags: ["Easy"] },
+  { deckId: "d_hindi", front: "What is the Hindi meaning of school?", back: "Vidyalaya", tags: ["Easy"] },
+  { deckId: "d_hindi", front: "What is the Hindi meaning of friend?", back: "Dost", tags: ["Easy"] },
 ];
 
 function buildSample() {
@@ -265,8 +263,8 @@ export const useStore = create<State>()(
       },
     }),
     {
-      name: "flashmaster-store-v3",
-      version: 3,
+      name: "flashmaster-store-v4",
+      version: 4,
       onRehydrateStorage: () => (state) => {
         if (state && state.decks.length === 0 && state.cards.length === 0) {
           state.loadSampleData();
