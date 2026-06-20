@@ -149,16 +149,18 @@ function buildSample() {
   return { decks, cards };
 }
 
+const initialSample = buildSample();
+
 export const useStore = create<State>()(
   persist(
     (set, get) => ({
-      decks: [],
-      cards: [],
+      decks: initialSample.decks,
+      cards: initialSample.cards,
       quizHistory: [],
       achievements: [],
       activity: [],
       streak: { current: 0, longest: 0 },
-      settings: { theme: "dark", dailyGoal: 20, notifications: true, userName: "Learner" },
+      settings: { theme: "light", dailyGoal: 20, notifications: true, userName: "Learner" },
 
       addDeck: (d) => {
         const id = "d_" + uid();
@@ -216,7 +218,6 @@ export const useStore = create<State>()(
           ? s.activity.map((a) => (a.date === today ? { ...a, cards: a.cards + cards, minutes: a.minutes + minutes } : a))
           : [...s.activity, { date: today, cards, minutes }];
 
-        // streak
         const last = s.streak.lastDate;
         let current = s.streak.current;
         if (last !== today) {
@@ -241,24 +242,31 @@ export const useStore = create<State>()(
         set((s) => (s.achievements.includes(id) ? s : { achievements: [...s.achievements, id] })),
 
       setSettings: (patch) => set((s) => ({ settings: { ...s.settings, ...patch } })),
-      toggleTheme: () =>
-        set((s) => ({ settings: { ...s.settings, theme: s.settings.theme === "dark" ? "light" : "dark" } })),
+      toggleTheme: () => {
+        /* dark mode removed — light only */
+      },
 
       importData: (data) => set((s) => ({ ...s, ...data })),
       exportData: () => JSON.stringify(get(), null, 2),
-      resetAll: () =>
+      resetAll: () => {
+        const fresh = buildSample();
         set({
-          decks: [], cards: [], quizHistory: [], achievements: [], activity: [],
+          decks: fresh.decks,
+          cards: fresh.cards,
+          quizHistory: [],
+          achievements: [],
+          activity: [],
           streak: { current: 0, longest: 0 },
-        }),
+        });
+      },
       loadSampleData: () => {
         const { decks, cards } = buildSample();
         set({ decks, cards });
       },
     }),
     {
-      name: "flashmaster-store-v2",
-      version: 2,
+      name: "flashmaster-store-v3",
+      version: 3,
       onRehydrateStorage: () => (state) => {
         if (state && state.decks.length === 0 && state.cards.length === 0) {
           state.loadSampleData();
