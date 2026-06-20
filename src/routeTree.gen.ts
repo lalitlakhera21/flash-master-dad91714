@@ -9,38 +9,225 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as QuizRouteImport } from './routes/quiz'
+import { Route as ProgressRouteImport } from './routes/progress'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DecksIndexRouteImport } from './routes/decks.index'
+import { Route as DecksNewRouteImport } from './routes/decks.new'
+import { Route as DecksDeckIdRouteImport } from './routes/decks.$deckId'
+import { Route as DecksDeckIdStudyRouteImport } from './routes/decks.$deckId.study'
+import { Route as DecksDeckIdQuizRouteImport } from './routes/decks.$deckId.quiz'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizRoute = QuizRouteImport.update({
+  id: '/quiz',
+  path: '/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProgressRoute = ProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritesRoute = FavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DecksIndexRoute = DecksIndexRouteImport.update({
+  id: '/decks/',
+  path: '/decks/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DecksNewRoute = DecksNewRouteImport.update({
+  id: '/decks/new',
+  path: '/decks/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DecksDeckIdRoute = DecksDeckIdRouteImport.update({
+  id: '/decks/$deckId',
+  path: '/decks/$deckId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DecksDeckIdStudyRoute = DecksDeckIdStudyRouteImport.update({
+  id: '/study',
+  path: '/study',
+  getParentRoute: () => DecksDeckIdRoute,
+} as any)
+const DecksDeckIdQuizRoute = DecksDeckIdQuizRouteImport.update({
+  id: '/quiz',
+  path: '/quiz',
+  getParentRoute: () => DecksDeckIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/favorites': typeof FavoritesRoute
+  '/profile': typeof ProfileRoute
+  '/progress': typeof ProgressRoute
+  '/quiz': typeof QuizRoute
+  '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
+  '/decks/$deckId': typeof DecksDeckIdRouteWithChildren
+  '/decks/new': typeof DecksNewRoute
+  '/decks/': typeof DecksIndexRoute
+  '/decks/$deckId/quiz': typeof DecksDeckIdQuizRoute
+  '/decks/$deckId/study': typeof DecksDeckIdStudyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/favorites': typeof FavoritesRoute
+  '/profile': typeof ProfileRoute
+  '/progress': typeof ProgressRoute
+  '/quiz': typeof QuizRoute
+  '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
+  '/decks/$deckId': typeof DecksDeckIdRouteWithChildren
+  '/decks/new': typeof DecksNewRoute
+  '/decks': typeof DecksIndexRoute
+  '/decks/$deckId/quiz': typeof DecksDeckIdQuizRoute
+  '/decks/$deckId/study': typeof DecksDeckIdStudyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/favorites': typeof FavoritesRoute
+  '/profile': typeof ProfileRoute
+  '/progress': typeof ProgressRoute
+  '/quiz': typeof QuizRoute
+  '/search': typeof SearchRoute
+  '/settings': typeof SettingsRoute
+  '/decks/$deckId': typeof DecksDeckIdRouteWithChildren
+  '/decks/new': typeof DecksNewRoute
+  '/decks/': typeof DecksIndexRoute
+  '/decks/$deckId/quiz': typeof DecksDeckIdQuizRoute
+  '/decks/$deckId/study': typeof DecksDeckIdStudyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/favorites'
+    | '/profile'
+    | '/progress'
+    | '/quiz'
+    | '/search'
+    | '/settings'
+    | '/decks/$deckId'
+    | '/decks/new'
+    | '/decks/'
+    | '/decks/$deckId/quiz'
+    | '/decks/$deckId/study'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/favorites'
+    | '/profile'
+    | '/progress'
+    | '/quiz'
+    | '/search'
+    | '/settings'
+    | '/decks/$deckId'
+    | '/decks/new'
+    | '/decks'
+    | '/decks/$deckId/quiz'
+    | '/decks/$deckId/study'
+  id:
+    | '__root__'
+    | '/'
+    | '/favorites'
+    | '/profile'
+    | '/progress'
+    | '/quiz'
+    | '/search'
+    | '/settings'
+    | '/decks/$deckId'
+    | '/decks/new'
+    | '/decks/'
+    | '/decks/$deckId/quiz'
+    | '/decks/$deckId/study'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FavoritesRoute: typeof FavoritesRoute
+  ProfileRoute: typeof ProfileRoute
+  ProgressRoute: typeof ProgressRoute
+  QuizRoute: typeof QuizRoute
+  SearchRoute: typeof SearchRoute
+  SettingsRoute: typeof SettingsRoute
+  DecksDeckIdRoute: typeof DecksDeckIdRouteWithChildren
+  DecksNewRoute: typeof DecksNewRoute
+  DecksIndexRoute: typeof DecksIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quiz': {
+      id: '/quiz'
+      path: '/quiz'
+      fullPath: '/quiz'
+      preLoaderRoute: typeof QuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/progress': {
+      id: '/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof ProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/favorites': {
+      id: '/favorites'
+      path: '/favorites'
+      fullPath: '/favorites'
+      preLoaderRoute: typeof FavoritesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +235,70 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/decks/': {
+      id: '/decks/'
+      path: '/decks'
+      fullPath: '/decks/'
+      preLoaderRoute: typeof DecksIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/decks/new': {
+      id: '/decks/new'
+      path: '/decks/new'
+      fullPath: '/decks/new'
+      preLoaderRoute: typeof DecksNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/decks/$deckId': {
+      id: '/decks/$deckId'
+      path: '/decks/$deckId'
+      fullPath: '/decks/$deckId'
+      preLoaderRoute: typeof DecksDeckIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/decks/$deckId/study': {
+      id: '/decks/$deckId/study'
+      path: '/study'
+      fullPath: '/decks/$deckId/study'
+      preLoaderRoute: typeof DecksDeckIdStudyRouteImport
+      parentRoute: typeof DecksDeckIdRoute
+    }
+    '/decks/$deckId/quiz': {
+      id: '/decks/$deckId/quiz'
+      path: '/quiz'
+      fullPath: '/decks/$deckId/quiz'
+      preLoaderRoute: typeof DecksDeckIdQuizRouteImport
+      parentRoute: typeof DecksDeckIdRoute
+    }
   }
 }
 
+interface DecksDeckIdRouteChildren {
+  DecksDeckIdQuizRoute: typeof DecksDeckIdQuizRoute
+  DecksDeckIdStudyRoute: typeof DecksDeckIdStudyRoute
+}
+
+const DecksDeckIdRouteChildren: DecksDeckIdRouteChildren = {
+  DecksDeckIdQuizRoute: DecksDeckIdQuizRoute,
+  DecksDeckIdStudyRoute: DecksDeckIdStudyRoute,
+}
+
+const DecksDeckIdRouteWithChildren = DecksDeckIdRoute._addFileChildren(
+  DecksDeckIdRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FavoritesRoute: FavoritesRoute,
+  ProfileRoute: ProfileRoute,
+  ProgressRoute: ProgressRoute,
+  QuizRoute: QuizRoute,
+  SearchRoute: SearchRoute,
+  SettingsRoute: SettingsRoute,
+  DecksDeckIdRoute: DecksDeckIdRouteWithChildren,
+  DecksNewRoute: DecksNewRoute,
+  DecksIndexRoute: DecksIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
