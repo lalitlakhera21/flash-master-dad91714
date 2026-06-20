@@ -180,6 +180,7 @@ export const useStore = create<State>()(
       achievements: [],
       activity: [],
       streak: { current: 0, longest: 0 },
+      xp: 0,
       settings: { theme: "light", dailyGoal: 20, notifications: true, userName: "Learner" },
 
       addDeck: (d) => {
