@@ -228,6 +228,56 @@
   animation: draw-check 0.5s ease-out 0.1s forwards;
 }
 
+@keyframes xp-float {
+  0% { transform: translate(-50%, 0) scale(0.7); opacity: 0; }
+  20% { transform: translate(-50%, -10px) scale(1.1); opacity: 1; }
+  100% { transform: translate(-50%, -90px) scale(0.95); opacity: 0; }
+}
+.animate-xp-float { animation: xp-float 1.4s cubic-bezier(.2,.7,.3,1) forwards; }
+
+@keyframes card-enter {
+  0% { transform: translateY(40px) scale(0.92) rotateZ(-2deg); opacity: 0; }
+  100% { transform: translateY(0) scale(1) rotateZ(0); opacity: 1; }
+}
+.animate-card-enter { animation: card-enter 0.5s cubic-bezier(.2,.8,.25,1) both; }
+
+@keyframes progress-fill {
+  from { width: var(--from, 0%); }
+  to { width: var(--to, 100%); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 40%, transparent); }
+  50% { box-shadow: 0 0 0 14px color-mix(in oklab, var(--primary) 0%, transparent); }
+}
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+.card-tilt {
+  transition: transform 0.4s cubic-bezier(.2,.8,.25,1);
+}
+.card-tilt:hover {
+  transform: translateY(-4px) rotateX(2deg) rotateY(-2deg) scale(1.01);
+}
+
+/* Stacked card illusion */
+.stack-card-2 {
+  position: absolute;
+  inset: 0;
+  transform: translateY(10px) scale(0.95);
+  opacity: 0.5;
+  border-radius: 1.5rem;
+  z-index: -1;
+}
+.stack-card-3 {
+  position: absolute;
+  inset: 0;
+  transform: translateY(20px) scale(0.9);
+  opacity: 0.25;
+  border-radius: 1.5rem;
+  z-index: -2;
+}
+
+
 /* Hide scrollbar utility */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
