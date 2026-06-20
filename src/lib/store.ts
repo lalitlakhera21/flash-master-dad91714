@@ -88,46 +88,46 @@ const todayStr = () => new Date().toISOString().slice(0, 10);
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
 
 const SAMPLE_DECKS: Omit<Deck, "createdAt">[] = [
-  { id: "d_english", name: "Basic English", description: "Simple words and grammar", emoji: "📘", color: "from-indigo-500 to-sky-500" },
-  { id: "d_math", name: "Basic Maths", description: "Easy numbers and formulas", emoji: "🔢", color: "from-emerald-500 to-teal-500" },
-  { id: "d_science", name: "Basic Science", description: "Everyday science facts", emoji: "🔬", color: "from-amber-500 to-orange-500" },
-  { id: "d_gk", name: "General Knowledge", description: "Simple GK questions", emoji: "🌍", color: "from-rose-500 to-pink-500" },
-  { id: "d_computer", name: "Computer Basics", description: "Easy computer terms", emoji: "💻", color: "from-sky-500 to-cyan-500" },
-  { id: "d_hindi", name: "Hindi Basics", description: "Common Hindi meanings", emoji: "📗", color: "from-fuchsia-500 to-purple-500" },
+  { id: "d_aiml", name: "Basic English", description: "Simple words and grammar", emoji: "📘", color: "from-indigo-500 to-sky-500" },
+  { id: "d_dsa", name: "Basic Maths", description: "Easy numbers and formulas", emoji: "🔢", color: "from-emerald-500 to-teal-500" },
+  { id: "d_math", name: "Basic Science", description: "Everyday science facts", emoji: "🔬", color: "from-amber-500 to-orange-500" },
+  { id: "d_interview", name: "General Knowledge", description: "Simple GK questions", emoji: "🌍", color: "from-rose-500 to-pink-500" },
+  { id: "d_python", name: "Computer Basics", description: "Easy computer terms", emoji: "💻", color: "from-sky-500 to-cyan-500" },
+  { id: "d_apt", name: "Hindi Basics", description: "Common Hindi meanings", emoji: "📗", color: "from-fuchsia-500 to-purple-500" },
 ];
 
 type SampleCard = { deckId: string; front: string; back: string; tags?: string[] };
 const SAMPLE_CARDS: SampleCard[] = [
   // Basic English
-  { deckId: "d_english", front: "What is the opposite of hot?", back: "Cold", tags: ["Easy"] },
-  { deckId: "d_english", front: "Which word is a noun: run or school?", back: "School", tags: ["Easy"] },
-  { deckId: "d_english", front: "Fill in the blank: I ___ a student.", back: "am", tags: ["Easy"] },
-  { deckId: "d_english", front: "What is the plural of book?", back: "Books", tags: ["Easy"] },
+  { deckId: "d_aiml", front: "What is the opposite of hot?", back: "Cold", tags: ["Easy"] },
+  { deckId: "d_aiml", front: "Which word is a noun: run or school?", back: "School", tags: ["Easy"] },
+  { deckId: "d_aiml", front: "Fill in the blank: I ___ a student.", back: "am", tags: ["Easy"] },
+  { deckId: "d_aiml", front: "What is the plural of book?", back: "Books", tags: ["Easy"] },
   // Basic Maths
-  { deckId: "d_math", front: "What is 2 + 3?", back: "5", tags: ["Easy"] },
-  { deckId: "d_math", front: "What is 10 - 4?", back: "6", tags: ["Easy"] },
-  { deckId: "d_math", front: "What is 5 × 2?", back: "10", tags: ["Easy"] },
-  { deckId: "d_math", front: "How many sides does a triangle have?", back: "3", tags: ["Easy"] },
+  { deckId: "d_dsa", front: "What is 2 + 3?", back: "5", tags: ["Easy"] },
+  { deckId: "d_dsa", front: "What is 10 - 4?", back: "6", tags: ["Easy"] },
+  { deckId: "d_dsa", front: "What is 5 × 2?", back: "10", tags: ["Easy"] },
+  { deckId: "d_dsa", front: "How many sides does a triangle have?", back: "3", tags: ["Easy"] },
   // Basic Science
-  { deckId: "d_science", front: "Which planet do we live on?", back: "Earth", tags: ["Easy"] },
-  { deckId: "d_science", front: "What do plants need to make food?", back: "Sunlight", tags: ["Easy"] },
-  { deckId: "d_science", front: "What do we breathe in?", back: "Oxygen", tags: ["Easy"] },
-  { deckId: "d_science", front: "Water freezes into what?", back: "Ice", tags: ["Easy"] },
+  { deckId: "d_math", front: "Which planet do we live on?", back: "Earth", tags: ["Easy"] },
+  { deckId: "d_math", front: "What do plants need to make food?", back: "Sunlight", tags: ["Easy"] },
+  { deckId: "d_math", front: "What do we breathe in?", back: "Oxygen", tags: ["Easy"] },
+  { deckId: "d_math", front: "Water freezes into what?", back: "Ice", tags: ["Easy"] },
   // General Knowledge
-  { deckId: "d_gk", front: "How many days are in a week?", back: "7 days", tags: ["Easy"] },
-  { deckId: "d_gk", front: "How many months are in a year?", back: "12 months", tags: ["Easy"] },
-  { deckId: "d_gk", front: "What color is the sky on a clear day?", back: "Blue", tags: ["Easy"] },
-  { deckId: "d_gk", front: "Which animal is called the king of the jungle?", back: "Lion", tags: ["Easy"] },
+  { deckId: "d_interview", front: "How many days are in a week?", back: "7 days", tags: ["Easy"] },
+  { deckId: "d_interview", front: "How many months are in a year?", back: "12 months", tags: ["Easy"] },
+  { deckId: "d_interview", front: "What color is the sky on a clear day?", back: "Blue", tags: ["Easy"] },
+  { deckId: "d_interview", front: "Which animal is called the king of the jungle?", back: "Lion", tags: ["Easy"] },
   // Computer Basics
-  { deckId: "d_computer", front: "What is used to type on a computer?", back: "Keyboard", tags: ["Easy"] },
-  { deckId: "d_computer", front: "What is used to move the pointer?", back: "Mouse", tags: ["Easy"] },
-  { deckId: "d_computer", front: "What does CPU stand for?", back: "Central Processing Unit", tags: ["Easy"] },
-  { deckId: "d_computer", front: "What do we use to see computer output?", back: "Monitor", tags: ["Easy"] },
+  { deckId: "d_python", front: "What is used to type on a computer?", back: "Keyboard", tags: ["Easy"] },
+  { deckId: "d_python", front: "What is used to move the pointer?", back: "Mouse", tags: ["Easy"] },
+  { deckId: "d_python", front: "What does CPU stand for?", back: "Central Processing Unit", tags: ["Easy"] },
+  { deckId: "d_python", front: "What do we use to see computer output?", back: "Monitor", tags: ["Easy"] },
   // Hindi Basics
-  { deckId: "d_hindi", front: "What is the Hindi meaning of water?", back: "Paani", tags: ["Easy"] },
-  { deckId: "d_hindi", front: "What is the Hindi meaning of book?", back: "Kitaab", tags: ["Easy"] },
-  { deckId: "d_hindi", front: "What is the Hindi meaning of school?", back: "Vidyalaya", tags: ["Easy"] },
-  { deckId: "d_hindi", front: "What is the Hindi meaning of friend?", back: "Dost", tags: ["Easy"] },
+  { deckId: "d_apt", front: "What is the Hindi meaning of water?", back: "Paani", tags: ["Easy"] },
+  { deckId: "d_apt", front: "What is the Hindi meaning of book?", back: "Kitaab", tags: ["Easy"] },
+  { deckId: "d_apt", front: "What is the Hindi meaning of school?", back: "Vidyalaya", tags: ["Easy"] },
+  { deckId: "d_apt", front: "What is the Hindi meaning of friend?", back: "Dost", tags: ["Easy"] },
 ];
 
 function buildSample() {
