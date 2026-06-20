@@ -253,31 +253,77 @@
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 
 .card-tilt {
-  transition: transform 0.4s cubic-bezier(.2,.8,.25,1);
+  transition: transform 0.5s cubic-bezier(.2,.8,.25,1);
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 .card-tilt:hover {
-  transform: translateY(-4px) scale(1.01);
+  transform: translateY(-6px) scale(1.015);
 }
+
+/* Always-on floating motion */
+@keyframes float-card {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-float { animation: float-card 5s ease-in-out infinite; }
 
 /* Stacked card illusion */
 .stack-card-2 {
   position: absolute;
   inset: 0;
-  transform: translateY(10px) scale(0.95);
-  opacity: 0.5;
-  border-radius: 1.5rem;
+  transform: translateY(14px) scale(0.94) rotate(-2deg);
+  opacity: 0.55;
+  border-radius: 1.75rem;
   z-index: -1;
+  filter: blur(1px);
+  box-shadow: 0 20px 40px -20px oklch(0.54 0.22 277 / 0.4);
 }
 .stack-card-3 {
   position: absolute;
   inset: 0;
-  transform: translateY(20px) scale(0.9);
-  opacity: 0.25;
-  border-radius: 1.5rem;
+  transform: translateY(28px) scale(0.88) rotate(3deg);
+  opacity: 0.3;
+  border-radius: 1.75rem;
   z-index: -2;
+  filter: blur(2px);
 }
 
+/* Gradient ring border for premium cards */
+.gradient-ring {
+  position: relative;
+}
+.gradient-ring::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg,
+    color-mix(in oklab, white 70%, transparent),
+    color-mix(in oklab, white 5%, transparent) 40%,
+    color-mix(in oklab, white 50%, transparent));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Subtle inner glow on hover */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer-overlay {
+  background: linear-gradient(110deg, transparent 30%, color-mix(in oklab, white 30%, transparent) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shimmer 3.5s ease-in-out infinite;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
 
 /* Hide scrollbar utility */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
+
