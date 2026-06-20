@@ -11,6 +11,8 @@ const tabs: { to: string; label: string; icon: typeof Home; exact?: boolean }[] 
 
 export function BottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  // Hide on immersive screens (study / quiz) so the floating nav doesn't overlap action buttons.
+  if (/\/decks\/[^/]+\/(study|quiz)$/.test(pathname)) return null;
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 pb-[env(safe-area-inset-bottom)]">
       <div className="mx-auto max-w-2xl px-3 pb-3">
