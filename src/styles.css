@@ -272,7 +272,7 @@
 .stack-card-2 {
   position: absolute;
   inset: 0;
-  transform: translateY(14px) scale(0.94) rotate(-2deg);
+  transform: translateY(8px) scale(0.94) rotate(-2deg);
   opacity: 0.55;
   border-radius: 1.75rem;
   z-index: -1;
@@ -282,7 +282,7 @@
 .stack-card-3 {
   position: absolute;
   inset: 0;
-  transform: translateY(28px) scale(0.88) rotate(3deg);
+  transform: translateY(16px) scale(0.88) rotate(3deg);
   opacity: 0.3;
   border-radius: 1.75rem;
   z-index: -2;
