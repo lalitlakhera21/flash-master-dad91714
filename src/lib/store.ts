@@ -2,6 +2,8 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export type Difficulty = "easy" | "medium" | "hard" | null;
+export type CardStatus = "new" | "learning" | "revision" | "mastered";
+export type AttemptResult = "correct" | "partial" | "wrong";
 
 export interface Card {
   id: string;
@@ -14,6 +16,12 @@ export interface Card {
   createdAt: number;
   lastReviewed?: number;
   reviewCount: number;
+  attempts?: number;
+  correct?: number;
+  wrong?: number;
+  partial?: number;
+  nextReview?: number;
+  status?: CardStatus;
 }
 
 export interface Deck {
