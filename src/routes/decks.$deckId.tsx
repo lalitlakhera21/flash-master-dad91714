@@ -165,40 +165,47 @@ function CardModal({ card, deckId, onClose }: { card: Card | null; deckId: strin
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-up" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-card rounded-t-3xl sm:rounded-3xl p-5 shadow-elegant animate-pop-in max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-4">
+    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-up" onClick={onClose}>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-md bg-card rounded-t-3xl sm:rounded-3xl shadow-elegant animate-pop-in flex flex-col max-h-[88vh] sm:max-h-[85vh]"
+      >
+        <div className="flex items-center justify-between p-5 pb-3 border-b border-border/50 shrink-0">
           <h3 className="text-lg font-bold">{card ? "Edit card" : "New card"}</h3>
           <button onClick={onClose} className="w-9 h-9 rounded-xl hover:bg-secondary flex items-center justify-center">
             <X className="w-4 h-4" />
           </button>
         </div>
-        <form onSubmit={submit} className="space-y-4">
-          <label className="block">
-            <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1.5 block">Question (front)</span>
-            <textarea value={front} onChange={(e) => setFront(e.target.value)} rows={2} className="w-full p-3 rounded-2xl border border-border bg-background text-sm focus:border-primary outline-none" autoFocus />
-          </label>
-          <label className="block">
-            <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1.5 block">Answer (back)</span>
-            <textarea value={back} onChange={(e) => setBack(e.target.value)} rows={3} className="w-full p-3 rounded-2xl border border-border bg-background text-sm focus:border-primary outline-none" />
-          </label>
-          <div>
-            <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1.5 block">Tags</span>
-            <div className="flex flex-wrap gap-1.5">
-              {TAG_OPTIONS.map((t) => {
-                const on = tags.includes(t);
-                return (
-                  <button type="button" key={t} onClick={() => setTags(on ? tags.filter((x) => x !== t) : [...tags, t])}
-                    className={`px-3 h-8 rounded-full text-xs font-semibold transition-all ${on ? "gradient-primary text-primary-foreground shadow-soft" : "bg-secondary text-secondary-foreground"}`}>
-                    {t}
-                  </button>
-                );
-              })}
+        <form onSubmit={submit} className="flex flex-col flex-1 min-h-0">
+          <div className="flex-1 overflow-y-auto p-5 space-y-4">
+            <label className="block">
+              <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1.5 block">Question (front)</span>
+              <textarea value={front} onChange={(e) => setFront(e.target.value)} rows={2} className="w-full p-3 rounded-2xl border border-border bg-background text-sm focus:border-primary outline-none" autoFocus />
+            </label>
+            <label className="block">
+              <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1.5 block">Answer (back)</span>
+              <textarea value={back} onChange={(e) => setBack(e.target.value)} rows={3} className="w-full p-3 rounded-2xl border border-border bg-background text-sm focus:border-primary outline-none" />
+            </label>
+            <div>
+              <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-1.5 block">Tags</span>
+              <div className="flex flex-wrap gap-1.5">
+                {TAG_OPTIONS.map((t) => {
+                  const on = tags.includes(t);
+                  return (
+                    <button type="button" key={t} onClick={() => setTags(on ? tags.filter((x) => x !== t) : [...tags, t])}
+                      className={`px-3 h-8 rounded-full text-xs font-semibold transition-all ${on ? "gradient-primary text-primary-foreground shadow-soft" : "bg-secondary text-secondary-foreground"}`}>
+                      {t}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
-          <button type="submit" className="w-full h-12 rounded-2xl gradient-primary text-primary-foreground font-bold shadow-elegant">
-            {card ? "Save changes" : "Add card"}
-          </button>
+          <div className="p-5 pt-3 border-t border-border/50 shrink-0 bg-card rounded-b-3xl">
+            <button type="submit" className="w-full h-12 rounded-2xl gradient-primary text-primary-foreground font-bold shadow-elegant">
+              {card ? "Save changes" : "Add card"}
+            </button>
+          </div>
         </form>
       </div>
     </div>
