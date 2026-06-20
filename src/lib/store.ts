@@ -231,6 +231,52 @@ export const useStore = create<State>()(
           ),
         })),
 
+      recordAttempt: (id, result) => {
+        const day = 86400000;
+        const intervals: Record<AttemptResult | "mastered", number> = {
+          wrong: 1 * day,
+          partial: 3 * day,
+          correct: 7 * day,
+          mastered: 14 * day,
+        };
+        const xpGain = result === "correct" ? 10 : result === "partial" ? 5 : 0;
+        let nextStatus: CardStatus = "learning";
+        set((s) => ({
+          xp: s.xp + xpGain,
+          cards: s.cards.map((c) => {
+            if (c.id !== id) return c;
+            const attempts = (c.attempts ?? 0) + 1;
+            const correct = (c.correct ?? 0) + (result === "correct" ? 1 : 0);
+            const wrong = (c.wrong ?? 0) + (result === "wrong" ? 1 : 0);
+            const partial = (c.partial ?? 0) + (result === "partial" ? 1 : 0);
+            const accuracy = correct / attempts;
+            let status: CardStatus = "learning";
+            if (result === "wrong") status = "revision";
+            else if (correct >= 3 && accuracy >= 0.8) status = "mastered";
+            else if (result === "correct") status = "learning";
+            nextStatus = status;
+            const interval = status === "mastered" ? intervals.mastered : intervals[result];
+            const difficulty: Difficulty =
+              status === "mastered" ? "easy" : result === "wrong" ? "hard" : "medium";
+            return {
+              ...c,
+              attempts,
+              correct,
+              wrong,
+              partial,
+              status,
+              difficulty,
+              lastReviewed: Date.now(),
+              reviewCount: c.reviewCount + 1,
+              nextReview: Date.now() + interval,
+            };
+          }),
+        }));
+        if (nextStatus === "mastered") get().unlock("first_mastered");
+        return xpGain;
+      },
+
+
       recordStudy: (cards, minutes) => {
         const today = todayStr();
         const s = get();
