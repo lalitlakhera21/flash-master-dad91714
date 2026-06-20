@@ -66,6 +66,9 @@ interface State {
   settings: Settings;
   streak: { current: number; longest: number; lastDate?: string };
   xp: number;
+  isAdmin: boolean;
+  adminLogin: (key: string) => boolean;
+  adminLogout: () => void;
 
   // actions
   addDeck: (d: Omit<Deck, "id" | "createdAt">) => string;
@@ -181,6 +184,15 @@ export const useStore = create<State>()(
       activity: [],
       streak: { current: 0, longest: 0 },
       xp: 0,
+      isAdmin: false,
+      adminLogin: (key) => {
+        if (key === "VGU123") {
+          set({ isAdmin: true });
+          return true;
+        }
+        return false;
+      },
+      adminLogout: () => set({ isAdmin: false }),
       settings: { theme: "light", dailyGoal: 20, notifications: true, userName: "Learner" },
 
       addDeck: (d) => {
@@ -332,8 +344,8 @@ export const useStore = create<State>()(
       },
     }),
     {
-      name: "flashmaster-store-v6",
-      version: 6,
+      name: "flashmaster-store-v7",
+      version: 7,
       onRehydrateStorage: () => (state) => {
         if (state && state.decks.length === 0 && state.cards.length === 0) {
           state.loadSampleData();

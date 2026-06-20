@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useStore, ACHIEVEMENTS } from "@/lib/store";
 import { PageHeader, PageShell } from "@/components/Layout";
-import { Heart, Settings as SettingsIcon, Download, Upload } from "lucide-react";
+import { Heart, Settings as SettingsIcon, Download, Upload, Shield, LogOut } from "lucide-react";
 import { toast } from "sonner";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({ meta: [{ title: "Profile — FlashMaster" }, { name: "description", content: "Your stats, achievements and learning data." }] }),
@@ -12,6 +12,10 @@ export const Route = createFileRoute("/profile")({
 
 function Profile() {
   const { settings, cards, quizHistory, activity, achievements, exportData, importData } = useStore();
+  const isAdmin = useStore((s) => s.isAdmin);
+  const adminLogin = useStore((s) => s.adminLogin);
+  const adminLogout = useStore((s) => s.adminLogout);
+  const [adminKey, setAdminKey] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const totalMinutes = activity.reduce((a, b) => a + b.minutes, 0);
   const totalCardsStudied = cards.filter((c) => c.lastReviewed).length;
@@ -117,6 +121,49 @@ function Profile() {
         <Upload className="w-4 h-4" /> Import JSON
       </button>
       <input ref={fileRef} type="file" accept="application/json" onChange={onImport} className="hidden" />
+
+      <h3 className="text-lg font-bold mt-6 mb-3 flex items-center gap-2">
+        <Shield className="w-4 h-4" /> Admin access
+      </h3>
+      {isAdmin ? (
+        <div className="glass rounded-2xl p-4 shadow-soft flex items-center justify-between">
+          <div>
+            <p className="font-bold text-sm text-emerald-600">Admin mode active</p>
+            <p className="text-xs text-muted-foreground">You can add, edit and delete cards.</p>
+          </div>
+          <button
+            onClick={() => { adminLogout(); toast.success("Logged out of admin"); }}
+            className="inline-flex items-center gap-1.5 px-3 h-9 rounded-2xl glass text-sm font-semibold"
+          >
+            <LogOut className="w-4 h-4" /> Logout
+          </button>
+        </div>
+      ) : (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (adminLogin(adminKey.trim())) {
+              toast.success("Admin unlocked");
+              setAdminKey("");
+            } else {
+              toast.error("Invalid admin key");
+            }
+          }}
+          className="glass rounded-2xl p-4 shadow-soft space-y-3"
+        >
+          <p className="text-xs text-muted-foreground">Enter the admin key to manage cards.</p>
+          <input
+            type="password"
+            value={adminKey}
+            onChange={(e) => setAdminKey(e.target.value)}
+            placeholder="Admin key"
+            className="w-full p-3 rounded-2xl border border-border bg-background text-sm focus:border-primary outline-none"
+          />
+          <button type="submit" className="w-full h-11 rounded-2xl gradient-primary text-primary-foreground font-bold text-sm shadow-elegant">
+            Unlock admin
+          </button>
+        </form>
+      )}
     </PageShell>
   );
 }

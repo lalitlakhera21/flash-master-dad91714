@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useStore, TAG_OPTIONS, Card } from "@/lib/store";
 import { PageHeader, PageShell, EmptyState } from "@/components/Layout";
-import { Heart, Trash2, Plus, Play, Trophy, Edit3, X } from "lucide-react";
+import { Heart, Trash2, Plus, Play, Trophy, Edit3, X, Lock } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/decks/$deckId")({
@@ -18,6 +18,7 @@ function DeckDetail() {
   const deleteDeck = useStore((s) => s.deleteDeck);
   const deleteCard = useStore((s) => s.deleteCard);
   const toggleFavorite = useStore((s) => s.toggleFavorite);
+  const isAdmin = useStore((s) => s.isAdmin);
   const deck = decks.find((d) => d.id === deckId);
   const cards = allCards.filter((c) => c.deckId === deckId);
   const [editing, setEditing] = useState<Card | null>(null);
@@ -39,19 +40,21 @@ function DeckDetail() {
         subtitle={`${cards.length} cards · ${deck.description}`}
         back="/decks"
         right={
-          <button
-            onClick={() => {
-              if (confirm("Delete this deck and all its cards?")) {
-                deleteDeck(deck.id);
-                toast.success("Deck deleted");
-                navigate({ to: "/decks" });
-              }
-            }}
-            className="w-10 h-10 rounded-2xl glass flex items-center justify-center text-destructive"
-            aria-label="Delete deck"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
+          isAdmin ? (
+            <button
+              onClick={() => {
+                if (confirm("Delete this deck and all its cards?")) {
+                  deleteDeck(deck.id);
+                  toast.success("Deck deleted");
+                  navigate({ to: "/decks" });
+                }
+              }}
+              className="w-10 h-10 rounded-2xl glass flex items-center justify-center text-destructive"
+              aria-label="Delete deck"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          ) : null
         }
       />
 
@@ -81,23 +84,31 @@ function DeckDetail() {
 
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-lg font-bold">Cards ({cards.length})</h3>
-        <button
-          onClick={() => setAdding(true)}
-          className="inline-flex items-center gap-1.5 px-3 h-9 rounded-2xl gradient-primary text-primary-foreground text-sm font-semibold shadow-soft"
-        >
-          <Plus className="w-4 h-4" /> Add card
-        </button>
+        {isAdmin ? (
+          <button
+            onClick={() => setAdding(true)}
+            className="inline-flex items-center gap-1.5 px-3 h-9 rounded-2xl gradient-primary text-primary-foreground text-sm font-semibold shadow-soft"
+          >
+            <Plus className="w-4 h-4" /> Add card
+          </button>
+        ) : (
+          <Link to="/profile" className="inline-flex items-center gap-1.5 px-3 h-9 rounded-2xl glass text-xs font-semibold text-muted-foreground">
+            <Lock className="w-3.5 h-3.5" /> Admin only
+          </Link>
+        )}
       </div>
 
       {cards.length === 0 ? (
         <EmptyState
           emoji="📝"
           title="No cards yet"
-          description="Add your first card to start studying."
+          description={isAdmin ? "Add your first card to start studying." : "Only an admin can add cards."}
           action={
-            <button onClick={() => setAdding(true)} className="rounded-2xl gradient-primary px-5 py-2.5 text-primary-foreground text-sm font-semibold shadow-elegant">
-              Add card
-            </button>
+            isAdmin ? (
+              <button onClick={() => setAdding(true)} className="rounded-2xl gradient-primary px-5 py-2.5 text-primary-foreground text-sm font-semibold shadow-elegant">
+                Add card
+              </button>
+            ) : undefined
           }
         />
       ) : (
@@ -107,7 +118,7 @@ function DeckDetail() {
               <div className="flex items-start gap-3">
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold text-sm leading-snug">{c.front}</p>
-                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{c.back}</p>
+                  <p className="text-[11px] text-muted-foreground mt-1 italic">Answer hidden — open Study to reveal</p>
                   {c.tags.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1">
                       {c.tags.map((t) => (
@@ -120,12 +131,16 @@ function DeckDetail() {
                   <button onClick={() => toggleFavorite(c.id)} className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-secondary">
                     <Heart className={`w-4 h-4 ${c.isFavorite ? "fill-rose-500 text-rose-500" : ""}`} />
                   </button>
-                  <button onClick={() => setEditing(c)} className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-secondary">
-                    <Edit3 className="w-4 h-4" />
-                  </button>
-                  <button onClick={() => { deleteCard(c.id); toast.success("Card deleted"); }} className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-secondary text-destructive">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  {isAdmin && (
+                    <>
+                      <button onClick={() => setEditing(c)} className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-secondary">
+                        <Edit3 className="w-4 h-4" />
+                      </button>
+                      <button onClick={() => { deleteCard(c.id); toast.success("Card deleted"); }} className="w-8 h-8 rounded-xl flex items-center justify-center hover:bg-secondary text-destructive">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
