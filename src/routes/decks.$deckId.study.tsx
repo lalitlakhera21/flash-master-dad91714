@@ -281,38 +281,48 @@ function Study() {
         ) : (
           /* Card phase: question or flipped */
           <div
-            className={`relative w-full max-w-md isolate card-tilt ${shake ? "animate-shake" : ""} ${
+            className={`relative w-full max-w-sm isolate card-tilt ${shake ? "animate-shake" : ""} ${
               exitDir === "left" ? "swipe-left" : exitDir === "right" ? "swipe-right" : "animate-card-enter"
             }`}
             key={card.id}
+            onMouseMove={(e) => {
+              const el = e.currentTarget as HTMLDivElement;
+              const r = el.getBoundingClientRect();
+              const x = ((e.clientX - r.left) / r.width - 0.5) * 10;
+              const y = ((e.clientY - r.top) / r.height - 0.5) * -10;
+              el.style.transform = `perspective(1200px) rotateX(${y}deg) rotateY(${x}deg) translateY(-6px) scale(1.015)`;
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLDivElement).style.transform = "";
+            }}
           >
             {/* Stacked illusion */}
             <div className={`stack-card-2 bg-gradient-to-br ${deck.color}`} aria-hidden />
             <div className={`stack-card-3 bg-gradient-to-br ${deck.color}`} aria-hidden />
 
-            <div className="card-3d w-full aspect-[3/4]">
+            <div className="card-3d w-full aspect-[3/4] animate-float">
               <div className={`card-inner ${phase === "flipped" ? "flipped" : ""}`}>
                 {/* Front: Question */}
-                <div className={`card-face rounded-3xl bg-gradient-to-br ${deck.color} p-6 flex flex-col text-primary-foreground shadow-elegant relative overflow-hidden`}>
-                  <div className="absolute -right-6 -bottom-6 text-[140px] leading-none opacity-15">{deck.emoji}</div>
-                  <div className="flex items-center justify-between relative">
+                <div className={`card-face gradient-ring rounded-[1.75rem] bg-gradient-to-br ${deck.color} p-6 flex flex-col text-primary-foreground shadow-elegant relative overflow-hidden`}>
+                  <div className="absolute inset-0 shimmer-overlay" aria-hidden />
+                  <div className="absolute -right-8 -bottom-8 text-[160px] leading-none opacity-15 select-none">{deck.emoji}</div>
+                  <div className="flex items-center justify-between relative z-[2]">
                     <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider backdrop-blur ${meta.cls}`}>
                       {meta.label}
                     </span>
                     <button
                       onClick={() => toggleFavorite(card.id)}
-                      className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center"
+                      className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/30 transition-colors"
                       aria-label="Favorite"
                     >
                       <Heart className={`w-4 h-4 ${card.isFavorite ? "fill-current" : ""}`} />
                     </button>
                   </div>
-                  <div className="flex-1 flex flex-col items-center justify-center text-center relative">
-                    <p className="text-[10px] uppercase tracking-[0.25em] opacity-70 mb-3">Question</p>
-                    <p className="text-2xl sm:text-3xl font-extrabold leading-snug">{card.front}</p>
+                  <div className="flex-1 flex flex-col items-center justify-center text-center relative z-[2] px-2">
+                    <p className="text-[10px] uppercase tracking-[0.3em] opacity-70 mb-4">Question</p>
+                    <p className="text-2xl sm:text-3xl font-extrabold leading-snug drop-shadow-sm">{card.front}</p>
                   </div>
-                  {/* Mastery */}
-                  <div className="relative">
+                  <div className="relative z-[2]">
                     <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider opacity-80 mb-1">
                       <span>Mastery</span>
                       <span>{Math.round(mastery)}%</span>
@@ -324,7 +334,7 @@ function Study() {
                 </div>
 
                 {/* Back: Answer */}
-                <div className="card-face card-face-back rounded-3xl bg-card border-2 border-primary/30 p-6 flex flex-col shadow-elegant relative overflow-hidden">
+                <div className="card-face card-face-back gradient-ring rounded-[1.75rem] bg-card border-2 border-primary/20 p-6 flex flex-col shadow-elegant relative overflow-hidden">
                   <div className="flex items-center justify-between">
                     <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider bg-primary/15 text-primary">
                       ANSWER
@@ -333,8 +343,8 @@ function Study() {
                       Accuracy {accuracy}%
                     </span>
                   </div>
-                  <div className="flex-1 flex flex-col items-center justify-center text-center">
-                    <p className="text-xl sm:text-2xl font-extrabold leading-snug">{card.back}</p>
+                  <div className="flex-1 flex flex-col items-center justify-center text-center px-2">
+                    <p className="text-xl sm:text-2xl font-extrabold leading-snug text-gradient">{card.back}</p>
                   </div>
                   <p className="text-center text-xs text-muted-foreground font-semibold">Did you actually know this?</p>
                 </div>
