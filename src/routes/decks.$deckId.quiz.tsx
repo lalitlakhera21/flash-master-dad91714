@@ -71,10 +71,9 @@ function Quiz() {
   function next() {
     if (idx === questions.length - 1) {
       setDone(true);
-      const finalCorrect = selected === q.correctIdx ? correct : correct;
-      const score = Math.round((finalCorrect / questions.length) * 100);
-      if (!recorded) {
-        recordQuiz({ deckId: deck.id, deckName: deck.name, score, correct: finalCorrect, total: questions.length });
+      const score = Math.round((correct / questions.length) * 100);
+      if (!recorded && deck) {
+        recordQuiz({ deckId: deck.id, deckName: deck.name, score, correct, total: questions.length });
         setRecorded(true);
         if (score >= 80) fireConfetti();
       }
