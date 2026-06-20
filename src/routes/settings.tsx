@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useStore } from "@/lib/store";
 import { PageHeader, PageShell } from "@/components/Layout";
-import { Moon, Sun, Bell, Trash2 } from "lucide-react";
+import { Bell, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/settings")({
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/settings")({
 });
 
 function SettingsPage() {
-  const { settings, setSettings, toggleTheme, resetAll, loadSampleData } = useStore();
+  const { settings, setSettings, resetAll, loadSampleData } = useStore();
 
   return (
     <PageShell>
