@@ -284,7 +284,7 @@ function Study() {
         ) : (
           /* Card phase: question or flipped */
           <div
-            className={`relative w-full max-w-[220px] isolate card-tilt ${shake ? "animate-shake" : ""} ${
+            className={`relative w-full max-w-[280px] isolate card-tilt ${shake ? "animate-shake" : ""} ${
               exitDir === "left" ? "swipe-left" : exitDir === "right" ? "swipe-right" : "animate-card-enter"
             }`}
             key={card.id}
