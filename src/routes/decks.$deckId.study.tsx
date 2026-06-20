@@ -281,7 +281,7 @@ function Study() {
         ) : (
           /* Card phase: question or flipped */
           <div
-            className={`relative w-full max-w-sm isolate card-tilt ${shake ? "animate-shake" : ""} ${
+            className={`relative w-full max-w-[220px] isolate card-tilt ${shake ? "animate-shake" : ""} ${
               exitDir === "left" ? "swipe-left" : exitDir === "right" ? "swipe-right" : "animate-card-enter"
             }`}
             key={card.id}
@@ -303,50 +303,50 @@ function Study() {
             <div className="card-3d w-full aspect-[3/4] animate-float">
               <div className={`card-inner ${phase === "flipped" ? "flipped" : ""}`}>
                 {/* Front: Question */}
-                <div className={`card-face gradient-ring rounded-[1.75rem] bg-gradient-to-br ${deck.color} p-6 flex flex-col text-primary-foreground shadow-elegant relative overflow-hidden`}>
+                <div className={`card-face gradient-ring rounded-[1.75rem] bg-gradient-to-br ${deck.color} p-4 flex flex-col text-primary-foreground shadow-elegant relative overflow-hidden`}>
                   <div className="absolute inset-0 shimmer-overlay" aria-hidden />
-                  <div className="absolute -right-8 -bottom-8 text-[160px] leading-none opacity-15 select-none">{deck.emoji}</div>
+                  <div className="absolute -right-6 -bottom-6 text-[100px] leading-none opacity-15 select-none">{deck.emoji}</div>
                   <div className="flex items-center justify-between relative z-[2]">
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider backdrop-blur ${meta.cls}`}>
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-extrabold tracking-wider backdrop-blur ${meta.cls}`}>
                       {meta.label}
                     </span>
                     <button
                       onClick={() => toggleFavorite(card.id)}
-                      className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/30 transition-colors"
+                      className="w-7 h-7 rounded-lg bg-white/20 backdrop-blur flex items-center justify-center hover:bg-white/30 transition-colors"
                       aria-label="Favorite"
                     >
-                      <Heart className={`w-4 h-4 ${card.isFavorite ? "fill-current" : ""}`} />
+                      <Heart className={`w-3.5 h-3.5 ${card.isFavorite ? "fill-current" : ""}`} />
                     </button>
                   </div>
-                  <div className="flex-1 flex flex-col items-center justify-center text-center relative z-[2] px-2">
-                    <p className="text-[10px] uppercase tracking-[0.3em] opacity-70 mb-4">Question</p>
-                    <p className="text-2xl sm:text-3xl font-extrabold leading-snug drop-shadow-sm">{card.front}</p>
+                  <div className="flex-1 flex flex-col items-center justify-center text-center relative z-[2] px-1">
+                    <p className="text-[9px] uppercase tracking-[0.3em] opacity-70 mb-2">Question</p>
+                    <p className="text-lg sm:text-xl font-extrabold leading-snug drop-shadow-sm">{card.front}</p>
                   </div>
                   <div className="relative z-[2]">
-                    <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider opacity-80 mb-1">
+                    <div className="flex items-center justify-between text-[9px] font-bold uppercase tracking-wider opacity-80 mb-1">
                       <span>Mastery</span>
                       <span>{Math.round(mastery)}%</span>
                     </div>
-                    <div className="h-1.5 rounded-full bg-white/20 overflow-hidden">
+                    <div className="h-1 rounded-full bg-white/20 overflow-hidden">
                       <div className="h-full bg-white/90 transition-all duration-500" style={{ width: `${mastery}%` }} />
                     </div>
                   </div>
                 </div>
 
                 {/* Back: Answer */}
-                <div className="card-face card-face-back gradient-ring rounded-[1.75rem] bg-card border-2 border-primary/20 p-6 flex flex-col shadow-elegant relative overflow-hidden">
+                <div className="card-face card-face-back gradient-ring rounded-[1.75rem] bg-card border-2 border-primary/20 p-4 flex flex-col shadow-elegant relative overflow-hidden">
                   <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold tracking-wider bg-primary/15 text-primary">
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold tracking-wider bg-primary/15 text-primary">
                       ANSWER
                     </span>
-                    <span className="text-[10px] text-muted-foreground font-bold">
+                    <span className="text-[9px] text-muted-foreground font-bold">
                       Accuracy {accuracy}%
                     </span>
                   </div>
-                  <div className="flex-1 flex flex-col items-center justify-center text-center px-2">
-                    <p className="text-xl sm:text-2xl font-extrabold leading-snug text-gradient">{card.back}</p>
+                  <div className="flex-1 flex flex-col items-center justify-center text-center px-1">
+                    <p className="text-base sm:text-lg font-extrabold leading-snug text-gradient">{card.back}</p>
                   </div>
-                  <p className="text-center text-xs text-muted-foreground font-semibold">Did you actually know this?</p>
+                  <p className="text-center text-[10px] text-muted-foreground font-semibold">Did you actually know this?</p>
                 </div>
               </div>
             </div>
