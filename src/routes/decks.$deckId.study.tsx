@@ -38,7 +38,14 @@ function Study() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!deck) return null;
+  if (!deck) {
+    return (
+      <PageShell>
+        <PageHeader title="Deck not found" back="/decks" />
+        <EmptyState emoji="📚" title="Deck not found" description="Open a beginner deck from the decks page." />
+      </PageShell>
+    );
+  }
   if (cards.length === 0) {
     return (
       <PageShell>

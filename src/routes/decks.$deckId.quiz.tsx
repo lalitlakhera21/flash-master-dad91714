@@ -51,7 +51,14 @@ function Quiz() {
   const [done, setDone] = useState(false);
   const [recorded, setRecorded] = useState(false);
 
-  if (!deck) return null;
+  if (!deck) {
+    return (
+      <PageShell>
+        <PageHeader title="Deck not found" back="/decks" />
+        <EmptyState emoji="📚" title="Deck not found" description="Open a beginner deck from the decks page." />
+      </PageShell>
+    );
+  }
   if (cards.length < 2) {
     return (
       <PageShell>
