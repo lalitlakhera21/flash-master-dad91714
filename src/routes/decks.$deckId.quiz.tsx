@@ -37,11 +37,13 @@ function buildQuestions(cards: Card[]): Q[] {
 
 function Quiz() {
   const { deckId } = Route.useParams();
-  const deck = useStore((s) => s.decks.find((d) => d.id === deckId));
-  const cards = useStore((s) => s.cards.filter((c) => c.deckId === deckId));
+  const decks = useStore((s) => s.decks);
+  const allCards = useStore((s) => s.cards);
   const recordQuiz = useStore((s) => s.recordQuiz);
+  const deck = useMemo(() => decks.find((d) => d.id === deckId), [decks, deckId]);
+  const cards = useMemo(() => allCards.filter((c) => c.deckId === deckId), [allCards, deckId]);
 
-  const questions = useMemo(() => buildQuestions(cards), [deckId, cards.length]);
+  const questions = useMemo(() => buildQuestions(cards), [cards]);
   const [idx, setIdx] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [correct, setCorrect] = useState(0);
@@ -49,7 +51,14 @@ function Quiz() {
   const [done, setDone] = useState(false);
   const [recorded, setRecorded] = useState(false);
 
-  if (!deck) return null;
+  if (!deck) {
+    return (
+      <PageShell>
+        <PageHeader title="Deck not found" back="/decks" />
+        <EmptyState emoji="📚" title="Deck not found" description="Open a beginner deck from the decks page." />
+      </PageShell>
+    );
+  }
   if (cards.length < 2) {
     return (
       <PageShell>

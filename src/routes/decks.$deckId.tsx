@@ -13,9 +13,13 @@ export const Route = createFileRoute("/decks/$deckId")({
 function DeckDetail() {
   const { deckId } = Route.useParams();
   const navigate = useNavigate();
-  const deck = useStore((s) => s.decks.find((d) => d.id === deckId));
-  const cards = useStore((s) => s.cards.filter((c) => c.deckId === deckId));
-  const { deleteDeck, deleteCard, toggleFavorite } = useStore();
+  const decks = useStore((s) => s.decks);
+  const allCards = useStore((s) => s.cards);
+  const deleteDeck = useStore((s) => s.deleteDeck);
+  const deleteCard = useStore((s) => s.deleteCard);
+  const toggleFavorite = useStore((s) => s.toggleFavorite);
+  const deck = decks.find((d) => d.id === deckId);
+  const cards = allCards.filter((c) => c.deckId === deckId);
   const [editing, setEditing] = useState<Card | null>(null);
   const [adding, setAdding] = useState(false);
 
@@ -141,7 +145,8 @@ function DeckDetail() {
 }
 
 function CardModal({ card, deckId, onClose }: { card: Card | null; deckId: string; onClose: () => void }) {
-  const { addCard, updateCard } = useStore();
+  const addCard = useStore((s) => s.addCard);
+  const updateCard = useStore((s) => s.updateCard);
   const [front, setFront] = useState(card?.front ?? "");
   const [back, setBack] = useState(card?.back ?? "");
   const [tags, setTags] = useState<string[]>(card?.tags ?? []);

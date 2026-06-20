@@ -11,9 +11,15 @@ export const Route = createFileRoute("/decks/$deckId/study")({
 
 function Study() {
   const { deckId } = Route.useParams();
-  const deck = useStore((s) => s.decks.find((d) => d.id === deckId));
-  const cards = useStore((s) => s.cards.filter((c) => c.deckId === deckId));
-  const { setDifficulty, toggleFavorite, reviewCard, recordStudy, updateDeck } = useStore();
+  const decks = useStore((s) => s.decks);
+  const allCards = useStore((s) => s.cards);
+  const setDifficulty = useStore((s) => s.setDifficulty);
+  const toggleFavorite = useStore((s) => s.toggleFavorite);
+  const reviewCard = useStore((s) => s.reviewCard);
+  const recordStudy = useStore((s) => s.recordStudy);
+  const updateDeck = useStore((s) => s.updateDeck);
+  const deck = useMemo(() => decks.find((d) => d.id === deckId), [decks, deckId]);
+  const cards = useMemo(() => allCards.filter((c) => c.deckId === deckId), [allCards, deckId]);
 
   const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -32,7 +38,14 @@ function Study() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!deck) return null;
+  if (!deck) {
+    return (
+      <PageShell>
+        <PageHeader title="Deck not found" back="/decks" />
+        <EmptyState emoji="📚" title="Deck not found" description="Open a beginner deck from the decks page." />
+      </PageShell>
+    );
+  }
   if (cards.length === 0) {
     return (
       <PageShell>
