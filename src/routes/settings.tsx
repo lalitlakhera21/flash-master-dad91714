@@ -23,14 +23,6 @@ function SettingsPage() {
         </Row>
       </Section>
 
-      <Section title="Appearance">
-        <Row label="Theme">
-          <button onClick={toggleTheme} className="inline-flex items-center gap-2 px-3 h-9 rounded-2xl gradient-primary text-primary-foreground text-sm font-semibold">
-            {settings.theme === "dark" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-            {settings.theme === "dark" ? "Dark" : "Light"}
-          </button>
-        </Row>
-      </Section>
 
       <Section title="Study">
         <Row label="Daily goal (cards)">
