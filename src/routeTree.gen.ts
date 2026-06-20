@@ -18,7 +18,7 @@ import { Route as FavoritesRouteImport } from './routes/favorites'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DecksIndexRouteImport } from './routes/decks.index'
 import { Route as DecksNewRouteImport } from './routes/decks.new'
-import { Route as DecksDeckIdRouteImport } from './routes/decks.$deckId'
+import { Route as DecksDeckIdIndexRouteImport } from './routes/decks.$deckId.index'
 import { Route as DecksDeckIdStudyRouteImport } from './routes/decks.$deckId.study'
 import { Route as DecksDeckIdQuizRouteImport } from './routes/decks.$deckId.quiz'
 
@@ -67,20 +67,20 @@ const DecksNewRoute = DecksNewRouteImport.update({
   path: '/decks/new',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DecksDeckIdRoute = DecksDeckIdRouteImport.update({
-  id: '/decks/$deckId',
-  path: '/decks/$deckId',
+const DecksDeckIdIndexRoute = DecksDeckIdIndexRouteImport.update({
+  id: '/decks/$deckId/',
+  path: '/decks/$deckId/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DecksDeckIdStudyRoute = DecksDeckIdStudyRouteImport.update({
-  id: '/study',
-  path: '/study',
-  getParentRoute: () => DecksDeckIdRoute,
+  id: '/decks/$deckId/study',
+  path: '/decks/$deckId/study',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DecksDeckIdQuizRoute = DecksDeckIdQuizRouteImport.update({
-  id: '/quiz',
-  path: '/quiz',
-  getParentRoute: () => DecksDeckIdRoute,
+  id: '/decks/$deckId/quiz',
+  path: '/decks/$deckId/quiz',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -91,11 +91,11 @@ export interface FileRoutesByFullPath {
   '/quiz': typeof QuizRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
-  '/decks/$deckId': typeof DecksDeckIdRouteWithChildren
   '/decks/new': typeof DecksNewRoute
   '/decks/': typeof DecksIndexRoute
   '/decks/$deckId/quiz': typeof DecksDeckIdQuizRoute
   '/decks/$deckId/study': typeof DecksDeckIdStudyRoute
+  '/decks/$deckId/': typeof DecksDeckIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -105,11 +105,11 @@ export interface FileRoutesByTo {
   '/quiz': typeof QuizRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
-  '/decks/$deckId': typeof DecksDeckIdRouteWithChildren
   '/decks/new': typeof DecksNewRoute
   '/decks': typeof DecksIndexRoute
   '/decks/$deckId/quiz': typeof DecksDeckIdQuizRoute
   '/decks/$deckId/study': typeof DecksDeckIdStudyRoute
+  '/decks/$deckId': typeof DecksDeckIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -120,11 +120,11 @@ export interface FileRoutesById {
   '/quiz': typeof QuizRoute
   '/search': typeof SearchRoute
   '/settings': typeof SettingsRoute
-  '/decks/$deckId': typeof DecksDeckIdRouteWithChildren
   '/decks/new': typeof DecksNewRoute
   '/decks/': typeof DecksIndexRoute
   '/decks/$deckId/quiz': typeof DecksDeckIdQuizRoute
   '/decks/$deckId/study': typeof DecksDeckIdStudyRoute
+  '/decks/$deckId/': typeof DecksDeckIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -136,11 +136,11 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/search'
     | '/settings'
-    | '/decks/$deckId'
     | '/decks/new'
     | '/decks/'
     | '/decks/$deckId/quiz'
     | '/decks/$deckId/study'
+    | '/decks/$deckId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -150,11 +150,11 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/search'
     | '/settings'
-    | '/decks/$deckId'
     | '/decks/new'
     | '/decks'
     | '/decks/$deckId/quiz'
     | '/decks/$deckId/study'
+    | '/decks/$deckId'
   id:
     | '__root__'
     | '/'
@@ -164,11 +164,11 @@ export interface FileRouteTypes {
     | '/quiz'
     | '/search'
     | '/settings'
-    | '/decks/$deckId'
     | '/decks/new'
     | '/decks/'
     | '/decks/$deckId/quiz'
     | '/decks/$deckId/study'
+    | '/decks/$deckId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -179,9 +179,11 @@ export interface RootRouteChildren {
   QuizRoute: typeof QuizRoute
   SearchRoute: typeof SearchRoute
   SettingsRoute: typeof SettingsRoute
-  DecksDeckIdRoute: typeof DecksDeckIdRouteWithChildren
   DecksNewRoute: typeof DecksNewRoute
   DecksIndexRoute: typeof DecksIndexRoute
+  DecksDeckIdQuizRoute: typeof DecksDeckIdQuizRoute
+  DecksDeckIdStudyRoute: typeof DecksDeckIdStudyRoute
+  DecksDeckIdIndexRoute: typeof DecksDeckIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -249,43 +251,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DecksNewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/decks/$deckId': {
-      id: '/decks/$deckId'
+    '/decks/$deckId/': {
+      id: '/decks/$deckId/'
       path: '/decks/$deckId'
-      fullPath: '/decks/$deckId'
-      preLoaderRoute: typeof DecksDeckIdRouteImport
+      fullPath: '/decks/$deckId/'
+      preLoaderRoute: typeof DecksDeckIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/decks/$deckId/study': {
       id: '/decks/$deckId/study'
-      path: '/study'
+      path: '/decks/$deckId/study'
       fullPath: '/decks/$deckId/study'
       preLoaderRoute: typeof DecksDeckIdStudyRouteImport
-      parentRoute: typeof DecksDeckIdRoute
+      parentRoute: typeof rootRouteImport
     }
     '/decks/$deckId/quiz': {
       id: '/decks/$deckId/quiz'
-      path: '/quiz'
+      path: '/decks/$deckId/quiz'
       fullPath: '/decks/$deckId/quiz'
       preLoaderRoute: typeof DecksDeckIdQuizRouteImport
-      parentRoute: typeof DecksDeckIdRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
-
-interface DecksDeckIdRouteChildren {
-  DecksDeckIdQuizRoute: typeof DecksDeckIdQuizRoute
-  DecksDeckIdStudyRoute: typeof DecksDeckIdStudyRoute
-}
-
-const DecksDeckIdRouteChildren: DecksDeckIdRouteChildren = {
-  DecksDeckIdQuizRoute: DecksDeckIdQuizRoute,
-  DecksDeckIdStudyRoute: DecksDeckIdStudyRoute,
-}
-
-const DecksDeckIdRouteWithChildren = DecksDeckIdRoute._addFileChildren(
-  DecksDeckIdRouteChildren,
-)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -295,9 +283,11 @@ const rootRouteChildren: RootRouteChildren = {
   QuizRoute: QuizRoute,
   SearchRoute: SearchRoute,
   SettingsRoute: SettingsRoute,
-  DecksDeckIdRoute: DecksDeckIdRouteWithChildren,
   DecksNewRoute: DecksNewRoute,
   DecksIndexRoute: DecksIndexRoute,
+  DecksDeckIdQuizRoute: DecksDeckIdQuizRoute,
+  DecksDeckIdStudyRoute: DecksDeckIdStudyRoute,
+  DecksDeckIdIndexRoute: DecksDeckIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

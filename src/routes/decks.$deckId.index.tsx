@@ -5,7 +5,7 @@ import { PageHeader, PageShell, EmptyState } from "@/components/Layout";
 import { Heart, Trash2, Plus, Play, Trophy, Edit3, X, Lock } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/decks/$deckId")({
+export const Route = createFileRoute("/decks/$deckId/")({
   head: () => ({ meta: [{ title: "Deck — FlashMaster" }] }),
   component: DeckDetail,
 });
