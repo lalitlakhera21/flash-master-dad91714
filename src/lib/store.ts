@@ -257,7 +257,8 @@ export const useStore = create<State>()(
       },
     }),
     {
-      name: "flashmaster-store",
+      name: "flashmaster-store-v2",
+      version: 2,
       onRehydrateStorage: () => (state) => {
         if (state && state.decks.length === 0 && state.cards.length === 0) {
           state.loadSampleData();
