@@ -103,15 +103,12 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 function ThemeManager() {
-  const theme = useStore((s) => s.settings.theme);
   const decksCount = useStore((s) => s.decks.length);
   const cardsCount = useStore((s) => s.cards.length);
   const loadSampleData = useStore((s) => s.loadSampleData);
   useEffect(() => {
-    const el = document.documentElement;
-    if (theme === "dark") el.classList.add("dark");
-    else el.classList.remove("dark");
-  }, [theme]);
+    document.documentElement.classList.remove("dark");
+  }, []);
   useEffect(() => {
     if (decksCount === 0 && cardsCount === 0) loadSampleData();
   }, [decksCount, cardsCount, loadSampleData]);
