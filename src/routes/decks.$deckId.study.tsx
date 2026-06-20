@@ -281,7 +281,7 @@ function Study() {
         ) : (
           /* Card phase: question or flipped */
           <div
-            className={`relative w-full max-w-md ${shake ? "animate-shake" : ""} ${
+            className={`relative w-full max-w-md isolate card-tilt ${shake ? "animate-shake" : ""} ${
               exitDir === "left" ? "swipe-left" : exitDir === "right" ? "swipe-right" : "animate-card-enter"
             }`}
             key={card.id}
@@ -291,7 +291,7 @@ function Study() {
             <div className={`stack-card-3 bg-gradient-to-br ${deck.color}`} aria-hidden />
 
             <div className="card-3d w-full aspect-[3/4]">
-              <div className={`card-inner card-tilt ${phase === "flipped" ? "flipped" : ""}`}>
+              <div className={`card-inner ${phase === "flipped" ? "flipped" : ""}`}>
                 {/* Front: Question */}
                 <div className={`card-face rounded-3xl bg-gradient-to-br ${deck.color} p-6 flex flex-col text-primary-foreground shadow-elegant relative overflow-hidden`}>
                   <div className="absolute -right-6 -bottom-6 text-[140px] leading-none opacity-15">{deck.emoji}</div>

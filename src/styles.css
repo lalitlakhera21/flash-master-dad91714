@@ -256,7 +256,7 @@
   transition: transform 0.4s cubic-bezier(.2,.8,.25,1);
 }
 .card-tilt:hover {
-  transform: translateY(-4px) rotateX(2deg) rotateY(-2deg) scale(1.01);
+  transform: translateY(-4px) scale(1.01);
 }
 
 /* Stacked card illusion */
