@@ -20,6 +20,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { installCapacitorSafeAreaFallbacks } from "../lib/capacitor-safe-area";
 import { BottomNav } from "../components/BottomNav";
 import { useStore } from "../lib/store";
 import { Toaster } from "../components/ui/sonner";
@@ -111,7 +112,8 @@ function ThemeManager() {
   const cardsCount = useStore((s) => s.cards.length);
   const loadSampleData = useStore((s) => s.loadSampleData);
   useEffect(() => {
-    document.documentElement.classList.remove("dark");
+    installCapacitorSafeAreaFallbacks();
+    document.documentElement?.classList.remove("dark");
   }, []);
   useEffect(() => {
     if (decksCount === 0 && cardsCount === 0) loadSampleData();
