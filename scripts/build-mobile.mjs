@@ -32,14 +32,14 @@ const html = `<!doctype html>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0B0B12" />
+    <meta name="theme-color" content="#4F46E5" />
     <title>FlashMaster</title>
     ${entryCss ? `<link rel="stylesheet" href="./assets/${entryCss}" />` : ""}
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./icon-192.png" type="image/png" />
     <link rel="apple-touch-icon" href="./icon-192.png" />
     <style>
-      html, body, #root { min-height: 100%; background: #0B0B12; margin: 0; }
+      html, body, #root { min-height: 100%; margin: 0; }
     </style>
   </head>
   <body>
