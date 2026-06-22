@@ -3,7 +3,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
 const config: CapacitorConfig = {
   appId: "com.klbrother.flashmaster",
   appName: "FlashMaster",
-  webDir: "dist/client",
+  webDir: "dist/mobile",
   bundledWebRuntime: false,
   android: {
     allowMixedContent: false,

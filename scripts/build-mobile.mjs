@@ -11,7 +11,7 @@ import { readdirSync, writeFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
 const root = process.cwd();
-const clientDir = join(root, "dist", "client");
+const clientDir = join(root, "dist", "mobile");
 const assetsDir = join(clientDir, "assets");
 
 console.log("→ Running Capacitor mobile build…");

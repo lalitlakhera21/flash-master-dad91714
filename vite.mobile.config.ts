@@ -8,7 +8,7 @@ export default defineConfig({
   base: "./",
   plugins: [react(), tailwindcss(), tsconfigPaths()],
   build: {
-    outDir: "dist/client",
+    outDir: "dist/mobile",
     emptyOutDir: true,
     manifest: false,
     rollupOptions: {
