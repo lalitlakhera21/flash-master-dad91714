@@ -58,10 +58,24 @@ function Quiz() {
   const [xp, setXp] = useState(0);
   const startTime = useRef(Date.now());
   const [timer, setTimer] = useState(0);
+  const pendingTimers = useRef<Set<number>>(new Set());
+  const safeTimeout = (fn: () => void, ms: number) => {
+    const id = window.setTimeout(() => {
+      pendingTimers.current.delete(id);
+      fn();
+    }, ms);
+    pendingTimers.current.add(id);
+    return id;
+  };
 
   useEffect(() => {
     const t = setInterval(() => setTimer(Math.floor((Date.now() - startTime.current) / 1000)), 1000);
     return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => () => {
+    pendingTimers.current.forEach((id) => clearTimeout(id));
+    pendingTimers.current.clear();
   }, []);
 
   if (!deck) {
@@ -100,13 +114,13 @@ function Quiz() {
     } else {
       setCombo(0);
       setShake(true);
-      setTimeout(() => setShake(false), 480);
+      safeTimeout(() => setShake(false), 480);
     }
   }
 
   function next() {
     setExitDir(selected === q.correctIdx ? "right" : "left");
-    setTimeout(() => {
+    safeTimeout(() => {
       if (idx === questions.length - 1) {
         const score = Math.round((correct / questions.length) * 100);
         if (!recorded && deck) {

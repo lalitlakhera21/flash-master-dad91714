@@ -336,4 +336,15 @@
   animation: pulse-slow 6s ease-in-out infinite;
 }
 
+/* Reduce expensive infinite animations on devices that prefer less motion
+   (Android Capacitor WebView + accessibility settings). Heavy blurs and
+   shimmer loops can wedge the compositor and cause the UI to freeze. */
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-overlay,
+  .animate-pulse-slow,
+  .animate-float {
+    animation: none !important;
+  }
+}
+
 

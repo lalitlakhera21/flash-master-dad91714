@@ -44,6 +44,22 @@ function Study() {
   const startTime = useRef(Date.now());
   const [timer, setTimer] = useState(0);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const pendingTimers = useRef<Set<number>>(new Set());
+  const safeTimeout = (fn: () => void, ms: number) => {
+    const id = window.setTimeout(() => {
+      pendingTimers.current.delete(id);
+      fn();
+    }, ms);
+    pendingTimers.current.add(id);
+    return id;
+  };
+
+  useEffect(() => {
+    return () => {
+      pendingTimers.current.forEach((id) => clearTimeout(id));
+      pendingTimers.current.clear();
+    };
+  }, []);
 
   const card = cards[idx];
   const done = !card;
@@ -109,8 +125,8 @@ function Study() {
       setExitDir("left");
     }
 
-    setTimeout(() => setShake(false), 480);
-    setTimeout(() => {
+    safeTimeout(() => setShake(false), 480);
+    safeTimeout(() => {
       setIdx((i) => i + 1);
       setPhase("question");
       setTyped("");
