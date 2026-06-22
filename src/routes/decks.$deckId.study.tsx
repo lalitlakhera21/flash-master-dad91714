@@ -270,25 +270,36 @@ function Study() {
         ) : phase === "compare" ? (
           /* Side-by-side comparison — auto judged */
           (() => {
-            const verdict = judgeAnswer(typed, card.back);
+            const evalResult = evaluateAnswer(typed, card.back, card.front);
+            const { verdict, score, mode } = evalResult;
             const verdictMeta = {
-              correct: { label: "Correct!", emoji: "🎉", cls: "bg-emerald-500" },
-              partial: { label: "Almost there", emoji: "🤏", cls: "bg-amber-500" },
-              wrong: { label: "Not quite", emoji: "❌", cls: "bg-rose-500" },
+              correct: { label: "Correct", emoji: "🎉", cls: "bg-emerald-500" },
+              partial: { label: "Partial", emoji: "🤏", cls: "bg-amber-500" },
+              wrong: { label: "Wrong", emoji: "❌", cls: "bg-rose-500" },
             }[verdict];
             return (
               <div className="w-full animate-fade-up space-y-3">
                 <div className={`rounded-3xl ${verdictMeta.cls} text-white p-4 animate-pop-in shadow-elegant`}>
-                  <p className="text-[10px] uppercase tracking-widest font-extrabold opacity-90">Auto-graded</p>
-                  <p className="text-xl font-extrabold mt-0.5">{verdictMeta.emoji} {verdictMeta.label}</p>
-                </div>
-                <div className="rounded-3xl border-2 border-border bg-card p-4">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-1">Your answer</p>
-                  <p className="text-base font-semibold leading-snug">{typed}</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] uppercase tracking-widest font-extrabold opacity-90">
+                        AI Evaluation · {mode === "exact" ? "Exact match" : "Semantic"}
+                      </p>
+                      <p className="text-xl font-extrabold mt-0.5">{verdictMeta.emoji} {verdictMeta.label}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[10px] uppercase tracking-widest font-extrabold opacity-90">Match</p>
+                      <p className="text-3xl font-extrabold leading-none">{score}%</p>
+                    </div>
+                  </div>
                 </div>
                 <div className="rounded-3xl border-2 border-primary bg-primary/5 p-4">
                   <p className="text-[10px] uppercase tracking-wider text-primary font-extrabold mb-1">Correct answer</p>
-                  <p className="text-base font-extrabold leading-snug">{card.back}</p>
+                  <pre className="text-base font-extrabold leading-snug whitespace-pre-wrap font-mono break-words">{card.back}</pre>
+                </div>
+                <div className="rounded-3xl border-2 border-border bg-card p-4">
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-1">Your answer</p>
+                  <pre className="text-base font-semibold leading-snug whitespace-pre-wrap font-mono break-words">{typed}</pre>
                 </div>
                 <button
                   onClick={() => rate(verdict)}
