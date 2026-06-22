@@ -268,19 +268,37 @@ function Study() {
             </div>
           </div>
         ) : phase === "compare" ? (
-          /* Side-by-side comparison */
-          <div className="w-full animate-fade-up space-y-3">
-            <p className="text-xs uppercase tracking-widest text-muted-foreground font-bold">Comparison</p>
-            <div className="rounded-3xl border-2 border-border bg-card p-4">
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-1">Your answer</p>
-              <p className="text-base font-semibold leading-snug">{typed}</p>
-            </div>
-            <div className="rounded-3xl border-2 border-primary bg-primary/5 p-4 animate-pop-in">
-              <p className="text-[10px] uppercase tracking-wider text-primary font-extrabold mb-1">Correct answer</p>
-              <p className="text-base font-extrabold leading-snug">{card.back}</p>
-            </div>
-            <RatingBar onRate={rate} />
-          </div>
+          /* Side-by-side comparison — auto judged */
+          (() => {
+            const verdict = judgeAnswer(typed, card.back);
+            const verdictMeta = {
+              correct: { label: "Correct!", emoji: "🎉", cls: "bg-emerald-500" },
+              partial: { label: "Almost there", emoji: "🤏", cls: "bg-amber-500" },
+              wrong: { label: "Not quite", emoji: "❌", cls: "bg-rose-500" },
+            }[verdict];
+            return (
+              <div className="w-full animate-fade-up space-y-3">
+                <div className={`rounded-3xl ${verdictMeta.cls} text-white p-4 animate-pop-in shadow-elegant`}>
+                  <p className="text-[10px] uppercase tracking-widest font-extrabold opacity-90">Auto-graded</p>
+                  <p className="text-xl font-extrabold mt-0.5">{verdictMeta.emoji} {verdictMeta.label}</p>
+                </div>
+                <div className="rounded-3xl border-2 border-border bg-card p-4">
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-1">Your answer</p>
+                  <p className="text-base font-semibold leading-snug">{typed}</p>
+                </div>
+                <div className="rounded-3xl border-2 border-primary bg-primary/5 p-4">
+                  <p className="text-[10px] uppercase tracking-wider text-primary font-extrabold mb-1">Correct answer</p>
+                  <p className="text-base font-extrabold leading-snug">{card.back}</p>
+                </div>
+                <button
+                  onClick={() => rate(verdict)}
+                  className="w-full h-13 rounded-2xl gradient-primary text-primary-foreground font-extrabold shadow-elegant text-sm uppercase tracking-wider"
+                >
+                  Continue <ChevronRight className="w-4 h-4 inline ml-1" />
+                </button>
+              </div>
+            );
+          })()
         ) : (
           /* Card phase: question or flipped */
           <div
@@ -377,45 +395,66 @@ function Study() {
             </div>
           )}
 
-          {phase === "flipped" && <RatingBar onRate={rate} variant="flip" />}
+          {phase === "flipped" && (
+            <div className="animate-fade-up">
+              <p className="text-center text-xs uppercase tracking-widest text-muted-foreground font-bold mb-2">
+                You peeked — counted as not known
+              </p>
+              <button
+                onClick={() => rate("wrong")}
+                className="w-full h-14 rounded-2xl gradient-primary text-primary-foreground font-extrabold shadow-elegant text-sm uppercase tracking-wider inline-flex items-center justify-center gap-2"
+              >
+                Continue <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
         </div>
       </footer>
     </div>
   );
 }
 
-function RatingBar({ onRate, variant = "type" }: { onRate: (r: AttemptResult) => void; variant?: "type" | "flip" }) {
-  const labels = variant === "flip"
-    ? { wrong: "No", partial: "Partially", correct: "Yes" }
-    : { wrong: "Wrong", partial: "Almost", correct: "Correct" };
-  const emojis = { wrong: "😅", partial: "🤔", correct: "😎" };
-  return (
-    <div className="animate-fade-up">
-      {variant === "type" && (
-        <p className="text-center text-xs uppercase tracking-widest text-muted-foreground font-bold mb-3 mt-2">
-          How close were you?
-        </p>
-      )}
-      <div className="grid grid-cols-3 gap-2">
-        {(["wrong", "partial", "correct"] as const).map((r) => (
-          <button
-            key={r}
-            onClick={() => onRate(r)}
-            className={`h-16 rounded-2xl font-extrabold text-sm shadow-soft inline-flex flex-col items-center justify-center gap-0.5 transition-transform hover:scale-[1.04] active:scale-95 ${
-              r === "correct"
-                ? "bg-emerald-500 text-white"
-                : r === "partial"
-                ? "bg-amber-500 text-white"
-                : "bg-rose-500 text-white"
-            }`}
-          >
-            <span className="text-xl leading-none">{emojis[r]}</span>
-            <span className="uppercase tracking-wider text-[11px]">{labels[r]}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
+function normalize(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function levenshtein(a: string, b: string): number {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  const dp = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let prev = dp[0];
+    dp[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const tmp = dp[j];
+      dp[j] = a[i - 1] === b[j - 1] ? prev : Math.min(prev, dp[j], dp[j - 1]) + 1;
+      prev = tmp;
+    }
+  }
+  return dp[b.length];
+}
+
+function judgeAnswer(user: string, correct: string): AttemptResult {
+  const u = normalize(user);
+  const c = normalize(correct);
+  if (!u) return "wrong";
+  if (u === c) return "correct";
+  const userTokens = new Set(u.split(" ").filter(Boolean));
+  const correctTokens = c.split(" ").filter(Boolean);
+  const overlap = correctTokens.filter((t) => userTokens.has(t)).length;
+  const tokenRatio = correctTokens.length ? overlap / correctTokens.length : 0;
+  const dist = levenshtein(u, c);
+  const sim = 1 - dist / Math.max(u.length, c.length);
+  if (sim >= 0.85 || tokenRatio >= 0.9) return "correct";
+  if (sim >= 0.6 || tokenRatio >= 0.5 || c.includes(u) || u.includes(c)) return "partial";
+  return "wrong";
 }
 
 function Stat({ n, label, cls }: { n: number; label: string; cls: string }) {
