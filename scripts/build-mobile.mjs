@@ -2,33 +2,30 @@
 /**
  * Capacitor / Android build helper.
  *
- * TanStack Start builds an SSR worker + a client asset bundle. Capacitor needs
- * a static `dist/client/index.html` to load inside the Android WebView. This
- * script runs the normal Vite build and then writes a SPA shell that boots the
- * already-emitted client entry. All routing happens client-side via TanStack
- * Router, and localStorage / Zustand persistence behave exactly like a normal
- * SPA inside the WebView.
+ * Capacitor needs a static `dist/mobile/index.html` and cannot hydrate a
+ * TanStack Start SSR document without the server bootstrap payload. This script
+ * builds a dedicated client-only Android bundle and writes a WebView-safe shell.
  */
 import { execSync } from "node:child_process";
 import { readdirSync, writeFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
 const root = process.cwd();
-const clientDir = join(root, "dist", "client");
+const clientDir = join(root, "dist", "mobile");
 const assetsDir = join(clientDir, "assets");
 
-console.log("→ Running vite build…");
-execSync("npx vite build", { stdio: "inherit" });
+console.log("→ Running Capacitor mobile build…");
+execSync("npx vite build --config vite.mobile.config.ts", { stdio: "inherit" });
 
 if (!existsSync(assetsDir)) {
   throw new Error(`Build output missing: ${assetsDir}`);
 }
 
 const files = readdirSync(assetsDir);
-const entryJs = files.find((f) => /^index-[^.]+\.js$/.test(f));
-const entryCss = files.find((f) => /^index-[^.]+\.css$/.test(f));
+const entryJs = files.find((f) => /^mobile-[^.]+\.js$/.test(f));
+const entryCss = files.find((f) => /^mobile-[^.]+\.css$/.test(f));
 
-if (!entryJs) throw new Error("Could not find client entry assets/index-*.js");
+if (!entryJs) throw new Error("Could not find mobile client entry assets/mobile-*.js");
 
 const html = `<!doctype html>
 <html lang="en">
@@ -37,22 +34,20 @@ const html = `<!doctype html>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#0B0B12" />
     <title>FlashMaster</title>
-    ${entryCss ? `<link rel="stylesheet" href="/assets/${entryCss}" />` : ""}
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="icon" href="/icon-192.png" type="image/png" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
+    ${entryCss ? `<link rel="stylesheet" href="./assets/${entryCss}" />` : ""}
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="./icon-192.png" />
     <style>
-      html, body { background: #0B0B12; margin: 0; }
-      #__loading { position: fixed; inset: 0; display: grid; place-items: center;
-        color: #fff; font-family: system-ui, sans-serif; }
+      html, body, #root { min-height: 100%; background: #0B0B12; margin: 0; }
     </style>
   </head>
   <body>
-    <div id="__loading">Loading FlashMaster…</div>
-    <script type="module" src="/assets/${entryJs}"></script>
+    <div id="root"></div>
+    <script type="module" src="./assets/${entryJs}"></script>
   </body>
 </html>
 `;
 
 writeFileSync(join(clientDir, "index.html"), html);
-console.log(`✔ Wrote dist/client/index.html (entry: ${entryJs})`);
+console.log(`✔ Wrote dist/mobile/index.html (entry: ${entryJs})`);

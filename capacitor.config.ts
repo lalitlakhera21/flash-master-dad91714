@@ -3,7 +3,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
 const config: CapacitorConfig = {
   appId: "com.klbrother.flashmaster",
   appName: "FlashMaster",
-  webDir: "dist/client",
+  webDir: "dist/mobile",
   bundledWebRuntime: false,
   android: {
     allowMixedContent: false,
@@ -11,6 +11,11 @@ const config: CapacitorConfig = {
     webContentsDebuggingEnabled: false,
   },
   plugins: {
+    SystemBars: {
+      insetsHandling: "disable",
+      style: "DARK",
+      hidden: false,
+    },
     SplashScreen: {
       launchShowDuration: 1500,
       launchAutoHide: true,
