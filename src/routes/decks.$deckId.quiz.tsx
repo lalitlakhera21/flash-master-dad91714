@@ -114,13 +114,13 @@ function Quiz() {
     } else {
       setCombo(0);
       setShake(true);
-      setTimeout(() => setShake(false), 480);
+      safeTimeout(() => setShake(false), 480);
     }
   }
 
   function next() {
     setExitDir(selected === q.correctIdx ? "right" : "left");
-    setTimeout(() => {
+    safeTimeout(() => {
       if (idx === questions.length - 1) {
         const score = Math.round((correct / questions.length) * 100);
         if (!recorded && deck) {
