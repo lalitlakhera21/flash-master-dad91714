@@ -2,7 +2,7 @@
 /**
  * Capacitor / Android build helper.
  *
- * Capacitor needs a static `dist/client/index.html` and cannot hydrate a
+ * Capacitor needs a static `dist/mobile/index.html` and cannot hydrate a
  * TanStack Start SSR document without the server bootstrap payload. This script
  * builds a dedicated client-only Android bundle and writes a WebView-safe shell.
  */
@@ -50,4 +50,4 @@ const html = `<!doctype html>
 `;
 
 writeFileSync(join(clientDir, "index.html"), html);
-console.log(`✔ Wrote dist/client/index.html (entry: ${entryJs})`);
+console.log(`✔ Wrote dist/mobile/index.html (entry: ${entryJs})`);
