@@ -395,7 +395,19 @@ function Study() {
             </div>
           )}
 
-          {phase === "flipped" && <RatingBar onRate={rate} variant="flip" />}
+          {phase === "flipped" && (
+            <div className="animate-fade-up">
+              <p className="text-center text-xs uppercase tracking-widest text-muted-foreground font-bold mb-2">
+                You peeked — counted as not known
+              </p>
+              <button
+                onClick={() => rate("wrong")}
+                className="w-full h-14 rounded-2xl gradient-primary text-primary-foreground font-extrabold shadow-elegant text-sm uppercase tracking-wider inline-flex items-center justify-center gap-2"
+              >
+                Continue <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          )}
         </div>
       </footer>
     </div>
