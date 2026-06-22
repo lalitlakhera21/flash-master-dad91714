@@ -125,8 +125,8 @@ function Study() {
       setExitDir("left");
     }
 
-    setTimeout(() => setShake(false), 480);
-    setTimeout(() => {
+    safeTimeout(() => setShake(false), 480);
+    safeTimeout(() => {
       setIdx((i) => i + 1);
       setPhase("question");
       setTyped("");
