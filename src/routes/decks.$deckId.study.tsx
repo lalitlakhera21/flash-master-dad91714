@@ -268,19 +268,37 @@ function Study() {
             </div>
           </div>
         ) : phase === "compare" ? (
-          /* Side-by-side comparison */
-          <div className="w-full animate-fade-up space-y-3">
-            <p className="text-xs uppercase tracking-widest text-muted-foreground font-bold">Comparison</p>
-            <div className="rounded-3xl border-2 border-border bg-card p-4">
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-1">Your answer</p>
-              <p className="text-base font-semibold leading-snug">{typed}</p>
-            </div>
-            <div className="rounded-3xl border-2 border-primary bg-primary/5 p-4 animate-pop-in">
-              <p className="text-[10px] uppercase tracking-wider text-primary font-extrabold mb-1">Correct answer</p>
-              <p className="text-base font-extrabold leading-snug">{card.back}</p>
-            </div>
-            <RatingBar onRate={rate} />
-          </div>
+          /* Side-by-side comparison — auto judged */
+          (() => {
+            const verdict = judgeAnswer(typed, card.back);
+            const verdictMeta = {
+              correct: { label: "Correct!", emoji: "🎉", cls: "bg-emerald-500" },
+              partial: { label: "Almost there", emoji: "🤏", cls: "bg-amber-500" },
+              wrong: { label: "Not quite", emoji: "❌", cls: "bg-rose-500" },
+            }[verdict];
+            return (
+              <div className="w-full animate-fade-up space-y-3">
+                <div className={`rounded-3xl ${verdictMeta.cls} text-white p-4 animate-pop-in shadow-elegant`}>
+                  <p className="text-[10px] uppercase tracking-widest font-extrabold opacity-90">Auto-graded</p>
+                  <p className="text-xl font-extrabold mt-0.5">{verdictMeta.emoji} {verdictMeta.label}</p>
+                </div>
+                <div className="rounded-3xl border-2 border-border bg-card p-4">
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-1">Your answer</p>
+                  <p className="text-base font-semibold leading-snug">{typed}</p>
+                </div>
+                <div className="rounded-3xl border-2 border-primary bg-primary/5 p-4">
+                  <p className="text-[10px] uppercase tracking-wider text-primary font-extrabold mb-1">Correct answer</p>
+                  <p className="text-base font-extrabold leading-snug">{card.back}</p>
+                </div>
+                <button
+                  onClick={() => rate(verdict)}
+                  className="w-full h-13 rounded-2xl gradient-primary text-primary-foreground font-extrabold shadow-elegant text-sm uppercase tracking-wider"
+                >
+                  Continue <ChevronRight className="w-4 h-4 inline ml-1" />
+                </button>
+              </div>
+            );
+          })()
         ) : (
           /* Card phase: question or flipped */
           <div
