@@ -24,6 +24,7 @@ import { installCapacitorSafeAreaFallbacks } from "../lib/capacitor-safe-area";
 import { BottomNav } from "../components/BottomNav";
 import { useStore } from "../lib/store";
 import { Toaster } from "../components/ui/sonner";
+import { AppErrorBoundary } from "../components/AppErrorBoundary";
 
 function NotFoundComponent() {
   return (
@@ -126,7 +127,9 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeManager />
-      <Outlet />
+      <AppErrorBoundary>
+        <Outlet />
+      </AppErrorBoundary>
       <BottomNav />
       <Toaster position="top-center" />
     </QueryClientProvider>
