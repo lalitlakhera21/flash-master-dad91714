@@ -452,8 +452,9 @@ function judgeAnswer(user: string, correct: string): AttemptResult {
   const tokenRatio = correctTokens.length ? overlap / correctTokens.length : 0;
   const dist = levenshtein(u, c);
   const sim = 1 - dist / Math.max(u.length, c.length);
-  if (sim >= 0.85 || tokenRatio >= 0.9) return "correct";
-  if (sim >= 0.6 || tokenRatio >= 0.5 || c.includes(u) || u.includes(c)) return "partial";
+  // 50% match or better counts as correct
+  if (sim >= 0.5 || tokenRatio >= 0.5 || c.includes(u) || u.includes(c)) return "correct";
+  if (sim >= 0.3 || tokenRatio >= 0.25) return "partial";
   return "wrong";
 }
 
