@@ -414,38 +414,47 @@ function Study() {
   );
 }
 
-function RatingBar({ onRate, variant = "type" }: { onRate: (r: AttemptResult) => void; variant?: "type" | "flip" }) {
-  const labels = variant === "flip"
-    ? { wrong: "No", partial: "Partially", correct: "Yes" }
-    : { wrong: "Wrong", partial: "Almost", correct: "Correct" };
-  const emojis = { wrong: "😅", partial: "🤔", correct: "😎" };
-  return (
-    <div className="animate-fade-up">
-      {variant === "type" && (
-        <p className="text-center text-xs uppercase tracking-widest text-muted-foreground font-bold mb-3 mt-2">
-          How close were you?
-        </p>
-      )}
-      <div className="grid grid-cols-3 gap-2">
-        {(["wrong", "partial", "correct"] as const).map((r) => (
-          <button
-            key={r}
-            onClick={() => onRate(r)}
-            className={`h-16 rounded-2xl font-extrabold text-sm shadow-soft inline-flex flex-col items-center justify-center gap-0.5 transition-transform hover:scale-[1.04] active:scale-95 ${
-              r === "correct"
-                ? "bg-emerald-500 text-white"
-                : r === "partial"
-                ? "bg-amber-500 text-white"
-                : "bg-rose-500 text-white"
-            }`}
-          >
-            <span className="text-xl leading-none">{emojis[r]}</span>
-            <span className="uppercase tracking-wider text-[11px]">{labels[r]}</span>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
+function normalize(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function levenshtein(a: string, b: string): number {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  const dp = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let prev = dp[0];
+    dp[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const tmp = dp[j];
+      dp[j] = a[i - 1] === b[j - 1] ? prev : Math.min(prev, dp[j], dp[j - 1]) + 1;
+      prev = tmp;
+    }
+  }
+  return dp[b.length];
+}
+
+function judgeAnswer(user: string, correct: string): AttemptResult {
+  const u = normalize(user);
+  const c = normalize(correct);
+  if (!u) return "wrong";
+  if (u === c) return "correct";
+  const userTokens = new Set(u.split(" ").filter(Boolean));
+  const correctTokens = c.split(" ").filter(Boolean);
+  const overlap = correctTokens.filter((t) => userTokens.has(t)).length;
+  const tokenRatio = correctTokens.length ? overlap / correctTokens.length : 0;
+  const dist = levenshtein(u, c);
+  const sim = 1 - dist / Math.max(u.length, c.length);
+  if (sim >= 0.85 || tokenRatio >= 0.9) return "correct";
+  if (sim >= 0.6 || tokenRatio >= 0.5 || c.includes(u) || u.includes(c)) return "partial";
+  return "wrong";
 }
 
 function Stat({ n, label, cls }: { n: number; label: string; cls: string }) {
