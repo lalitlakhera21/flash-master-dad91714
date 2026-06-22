@@ -452,21 +452,64 @@ function levenshtein(a: string, b: string): number {
   return dp[b.length];
 }
 
-function judgeAnswer(user: string, correct: string): AttemptResult {
+type QuestionKind = "code" | "theory";
+
+function detectKind(question: string, answer: string): QuestionKind {
+  const text = `${question}\n${answer}`;
+  // Strong code signals: brackets, semicolons, code keywords, SQL, HTML tags, formulas
+  const codeSignals = [
+    /[{}();\[\]<>]/,            // brackets/symbols
+    /[=+\-*/%^]=?/,             // operators
+    /["'`]/,                    // quotes
+    /\b(SELECT|INSERT|UPDATE|DELETE|FROM|WHERE|JOIN)\b/i,
+    /\b(function|def|class|return|const|let|var|import|public|static|void|int|float|print|console|printf|cout|System\.out)\b/,
+    /<\/?[a-z][\w-]*[^>]*>/i,   // html tag
+    /#include|#define|^\s*#/m,  // C preprocessor / markdown heading
+    /\$[a-zA-Z_]/,              // shell var
+    /\b(sudo|npm|npx|git|cd|ls|mkdir|rm|chmod|apt|pip|docker|cap|cargo)\b/,
+    /\\[a-zA-Z]+\{/,            // latex
+  ];
+  const questionHints = /\b(code|syntax|command|formula|query|tag|function|method|output|write|print|implement)\b/i;
+  if (codeSignals.some((r) => r.test(text))) return "code";
+  if (questionHints.test(question)) return "code";
+  // Short non-alphanumeric-heavy answers also look like syntax
+  const nonAlpha = (answer.match(/[^a-zA-Z0-9\s]/g) ?? []).length;
+  if (answer.length > 0 && nonAlpha / answer.length > 0.15) return "code";
+  return "theory";
+}
+
+function normalizeCode(s: string): string {
+  // Preserve symbols, case, structure — collapse only whitespace
+  return s.replace(/\r\n/g, "\n").replace(/[ \t]+/g, " ").replace(/\s*\n\s*/g, "\n").trim();
+}
+
+export type EvalResult = { verdict: AttemptResult; score: number; mode: "exact" | "semantic" };
+
+function evaluateAnswer(user: string, correct: string, question: string): EvalResult {
+  const kind = detectKind(question, correct);
+  if (kind === "code") {
+    const u = normalizeCode(user);
+    const c = normalizeCode(correct);
+    if (!u) return { verdict: "wrong", score: 0, mode: "exact" };
+    if (u === c) return { verdict: "correct", score: 100, mode: "exact" };
+    // Strict: any character difference = wrong. Show char-level similarity as info.
+    const dist = levenshtein(u, c);
+    const sim = Math.max(0, Math.round((1 - dist / Math.max(u.length, c.length)) * 100));
+    return { verdict: "wrong", score: sim, mode: "exact" };
+  }
+  // Semantic mode for theory/definitions/explanations
   const u = normalize(user);
   const c = normalize(correct);
-  if (!u) return "wrong";
-  if (u === c) return "correct";
+  if (!u) return { verdict: "wrong", score: 0, mode: "semantic" };
   const userTokens = new Set(u.split(" ").filter(Boolean));
   const correctTokens = c.split(" ").filter(Boolean);
   const overlap = correctTokens.filter((t) => userTokens.has(t)).length;
   const tokenRatio = correctTokens.length ? overlap / correctTokens.length : 0;
   const dist = levenshtein(u, c);
   const sim = 1 - dist / Math.max(u.length, c.length);
-  // 50% match or better counts as correct
-  if (sim >= 0.5 || tokenRatio >= 0.5 || c.includes(u) || u.includes(c)) return "correct";
-  if (sim >= 0.3 || tokenRatio >= 0.25) return "partial";
-  return "wrong";
+  const score = Math.round(Math.max(sim, tokenRatio) * 100);
+  const verdict: AttemptResult = score >= 80 ? "correct" : score >= 50 ? "partial" : "wrong";
+  return { verdict, score, mode: "semantic" };
 }
 
 function Stat({ n, label, cls }: { n: number; label: string; cls: string }) {
