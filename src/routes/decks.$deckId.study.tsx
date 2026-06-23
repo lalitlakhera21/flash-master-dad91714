@@ -318,9 +318,10 @@ function Study() {
                     </div>
                   </div>
                 </div>
-                <div className="rounded-3xl border-2 border-primary bg-primary/5 p-4">
-                  <p className="text-[10px] uppercase tracking-wider text-primary font-extrabold mb-1">Correct answer</p>
-                  <pre className="text-base font-extrabold leading-snug whitespace-pre-wrap font-mono break-words">{card.back}</pre>
+                <div className={`relative rounded-3xl bg-gradient-to-br ${deck.color} p-6 text-primary-foreground shadow-elegant overflow-hidden`}>
+                  <div className="absolute -right-6 -bottom-6 text-[120px] leading-none opacity-15 select-none pointer-events-none">💡</div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] opacity-80 font-bold mb-2 relative z-[1]">Correct answer</p>
+                  <pre className="text-lg sm:text-xl font-extrabold leading-snug whitespace-pre-wrap break-words font-mono relative z-[1] drop-shadow-sm">{card.back}</pre>
                 </div>
                 <div className="rounded-3xl border-2 border-border bg-card p-4">
                   <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-1">Your answer</p>
