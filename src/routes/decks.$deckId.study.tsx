@@ -72,8 +72,15 @@ function Study() {
   }, []);
 
   useEffect(() => {
-    if (phase === "typing") inputRef.current?.focus();
+    if (phase === "typing") {
+      const t = window.setTimeout(() => {
+        inputRef.current?.focus();
+        inputRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+      }, 80);
+      return () => window.clearTimeout(t);
+    }
   }, [phase]);
+
 
   useEffect(() => {
     return () => {
@@ -237,10 +244,18 @@ function Study() {
       </header>
 
       {/* Main stage */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-6 max-w-2xl w-full mx-auto relative overflow-hidden">
-        {/* Ambient glows */}
-        <div className="pointer-events-none absolute -top-10 -left-10 w-72 h-72 rounded-full bg-primary/25 blur-3xl animate-pulse-slow" aria-hidden />
-        <div className="pointer-events-none absolute -bottom-10 -right-10 w-72 h-72 rounded-full bg-accent/25 blur-3xl animate-pulse-slow" aria-hidden />
+      <main
+        className={`flex-1 flex flex-col items-center justify-center px-4 py-6 max-w-2xl w-full mx-auto relative ${
+          phase === "typing" || phase === "compare" ? "overflow-visible" : "overflow-hidden"
+        }`}
+      >
+        {/* Ambient glows — only on the flashcard view, hidden during typing/compare to avoid WebView freezes */}
+        {(phase === "question" || phase === "flipped") && (
+          <>
+            <div className="pointer-events-none absolute -top-10 -left-10 w-72 h-72 rounded-full bg-primary/25 blur-3xl animate-pulse-slow" aria-hidden />
+            <div className="pointer-events-none absolute -bottom-10 -right-10 w-72 h-72 rounded-full bg-accent/25 blur-3xl animate-pulse-slow" aria-hidden />
+          </>
+        )}
         {/* XP floater */}
         {xpPop && xpPop.amount > 0 && (
           <div
@@ -252,6 +267,7 @@ function Study() {
             </div>
           </div>
         )}
+
 
         {phase === "typing" ? (
           /* Full-screen typing challenge */
@@ -309,9 +325,10 @@ function Study() {
                     </div>
                   </div>
                 </div>
-                <div className="rounded-3xl border-2 border-primary bg-primary/5 p-4">
-                  <p className="text-[10px] uppercase tracking-wider text-primary font-extrabold mb-1">Correct answer</p>
-                  <pre className="text-base font-extrabold leading-snug whitespace-pre-wrap font-mono break-words">{card.back}</pre>
+                <div className={`relative rounded-3xl bg-gradient-to-br ${deck.color} p-6 text-primary-foreground shadow-elegant overflow-hidden`}>
+                  <div className="absolute -right-6 -bottom-6 text-[120px] leading-none opacity-15 select-none pointer-events-none">💡</div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] opacity-80 font-bold mb-2 relative z-[1]">Correct answer</p>
+                  <pre className="text-lg sm:text-xl font-extrabold leading-snug whitespace-pre-wrap break-words font-mono relative z-[1] drop-shadow-sm">{card.back}</pre>
                 </div>
                 <div className="rounded-3xl border-2 border-border bg-card p-4">
                   <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-1">Your answer</p>
