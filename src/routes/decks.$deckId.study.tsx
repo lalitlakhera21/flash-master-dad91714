@@ -72,8 +72,15 @@ function Study() {
   }, []);
 
   useEffect(() => {
-    if (phase === "typing") inputRef.current?.focus();
+    if (phase === "typing") {
+      const t = window.setTimeout(() => {
+        inputRef.current?.focus();
+        inputRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+      }, 80);
+      return () => window.clearTimeout(t);
+    }
   }, [phase]);
+
 
   useEffect(() => {
     return () => {
