@@ -348,3 +348,8 @@
 }
 
 
+
+/* Native keyboard handling — pad bottom so inputs aren't covered. */
+:root { --kb-height: 0px; }
+body.kb-open { padding-bottom: var(--kb-height); }
+body.kb-open .sticky-bottom-hide { display: none !important; }
