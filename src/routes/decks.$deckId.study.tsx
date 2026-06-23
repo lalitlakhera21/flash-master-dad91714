@@ -237,10 +237,18 @@ function Study() {
       </header>
 
       {/* Main stage */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-6 max-w-2xl w-full mx-auto relative overflow-hidden">
-        {/* Ambient glows */}
-        <div className="pointer-events-none absolute -top-10 -left-10 w-72 h-72 rounded-full bg-primary/25 blur-3xl animate-pulse-slow" aria-hidden />
-        <div className="pointer-events-none absolute -bottom-10 -right-10 w-72 h-72 rounded-full bg-accent/25 blur-3xl animate-pulse-slow" aria-hidden />
+      <main
+        className={`flex-1 flex flex-col items-center justify-center px-4 py-6 max-w-2xl w-full mx-auto relative ${
+          phase === "typing" || phase === "compare" ? "overflow-visible" : "overflow-hidden"
+        }`}
+      >
+        {/* Ambient glows — only on the flashcard view, hidden during typing/compare to avoid WebView freezes */}
+        {(phase === "question" || phase === "flipped") && (
+          <>
+            <div className="pointer-events-none absolute -top-10 -left-10 w-72 h-72 rounded-full bg-primary/25 blur-3xl animate-pulse-slow" aria-hidden />
+            <div className="pointer-events-none absolute -bottom-10 -right-10 w-72 h-72 rounded-full bg-accent/25 blur-3xl animate-pulse-slow" aria-hidden />
+          </>
+        )}
         {/* XP floater */}
         {xpPop && xpPop.amount > 0 && (
           <div
@@ -252,6 +260,7 @@ function Study() {
             </div>
           </div>
         )}
+
 
         {phase === "typing" ? (
           /* Full-screen typing challenge */
